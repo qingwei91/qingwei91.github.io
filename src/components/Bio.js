@@ -16,18 +16,8 @@ class Bio extends React.Component {
           marginBottom: rhythm(2.5),
         }}
       >
-        <img
-          src={profilePic}
-          alt={`Kyle Mathews`}
-          style={{
-            marginRight: rhythm(1 / 2),
-            marginBottom: 0,
-            width: rhythm(2),
-            height: rhythm(2.5),
-          }}
-        />
         <p>
-          I write stuff so that I don't have to remember.
+          I write stuff so that I can forget.
         </p>
       </div>
     )
