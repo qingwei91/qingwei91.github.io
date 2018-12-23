@@ -1,0 +1,259 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/app.a03716562d1e590f30ef.css">code[class*=language-],pre[class*=language-]{color:#000;background:none;font-family:Consolas,Monaco,Andale Mono,Ubuntu Mono,monospace;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*=language-]{position:relative;margin:.5em 0;overflow:visible;padding:0}pre[class*=language-]>code{position:relative;border-left:10px solid #358ccb;box-shadow:-1px 0 0 0 #358ccb,0 0 0 1px #dfdfdf;background-color:#fdfdfd;background-image:linear-gradient(transparent 50%,rgba(69,142,209,.04) 0);background-size:3em 3em;background-origin:content-box;background-attachment:local}code[class*=language]{max-height:inherit;height:inherit;padding:0 1em;display:block;overflow:auto}:not(pre)>code[class*=language-],pre[class*=language-]{background-color:#fdfdfd;box-sizing:border-box;margin-bottom:1em}:not(pre)>code[class*=language-]{position:relative;padding:.2em;border-radius:.3em;color:#c92c2c;border:1px solid rgba(0,0,0,.1);display:inline;white-space:normal}pre[class*=language-]:after,pre[class*=language-]:before{content:"";z-index:-2;display:block;position:absolute;bottom:.75em;left:.18em;width:40%;height:20%;max-height:13em;box-shadow:0 13px 8px #979797;-webkit-transform:rotate(-2deg);transform:rotate(-2deg)}:not(pre)>code[class*=language-]:after,pre[class*=language-]:after{right:.75em;left:auto;-webkit-transform:rotate(2deg);transform:rotate(2deg)}.token.block-comment,.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#7d8b99}.token.punctuation{color:#5f6364}.token.boolean,.token.constant,.token.deleted,.token.function-name,.token.number,.token.property,.token.symbol,.token.tag{color:#c92c2c}.token.attr-name,.token.builtin,.token.char,.token.function,.token.inserted,.token.selector,.token.string{color:#2f9c0a}.token.entity,.token.operator,.token.url,.token.variable{color:#a67f59;background:hsla(0,0%,100%,.5)}.token.atrule,.token.attr-value,.token.class-name,.token.keyword{color:#1990b8}.token.important,.token.regex{color:#e90}.language-css .token.string,.style .token.string{color:#a67f59;background:hsla(0,0%,100%,.5)}.token.important{font-weight:400}.token.bold{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}.namespace{opacity:.7}@media screen and (max-width:767px){pre[class*=language-]:after,pre[class*=language-]:before{bottom:14px;box-shadow:none}}.token.cr:before,.token.lf:before,.token.tab:not(:empty):before{color:#e0d7d1}pre[class*=language-].line-numbers.line-numbers{padding-left:0}pre[class*=language-].line-numbers.line-numbers code{padding-left:3.8em}pre[class*=language-].line-numbers.line-numbers .line-numbers-rows{left:0}pre[class*=language-][data-line]{padding-top:0;padding-bottom:0;padding-left:0}pre[data-line] code{position:relative;padding-left:4em}pre .line-highlight{margin-top:0}</style><style data-href="/1.76e6c55a11ab238cc939.css">@font-face{font-family:Montserrat;font-style:normal;font-display:swap;font-weight:100;src:local("Montserrat Thin "),local("Montserrat-Thin"),url(/static/montserrat-latin-100-50d279861fb3cbfed809eae6ed8b9ac9.woff2) format("woff2"),url(/static/montserrat-latin-100-5e334eff013f12fbb8ed72c2a253f119.woff) format("woff")}@font-face{font-family:Montserrat;font-style:italic;font-display:swap;font-weight:100;src:local("Montserrat Thin italic"),local("Montserrat-Thinitalic"),url(/static/montserrat-latin-100italic-8c0705336558194799a8729840d7ed9d.woff2) format("woff2"),url(/static/montserrat-latin-100italic-03e19243272affe738654a157625ec26.woff) format("woff")}@font-face{font-family:Montserrat;font-style:normal;font-display:swap;font-weight:200;src:local("Montserrat Extra Light "),local("Montserrat-Extra Light"),url(/static/montserrat-latin-200-4343d3d91a9446226e7a8bbb024111ad.woff2) format("woff2"),url(/static/montserrat-latin-200-f2022ecd65a0703ec3edcb7641709a75.woff) format("woff")}@font-face{font-family:Montserrat;font-style:italic;font-display:swap;font-weight:200;src:local("Montserrat Extra Light italic"),local("Montserrat-Extra Lightitalic"),url(/static/montserrat-latin-200italic-116c4c4b14ef76b0555da09854512022.woff2) format("woff2"),url(/static/montserrat-latin-200italic-89614a6008fc5c60739012463d0ee7e6.woff) format("woff")}@font-face{font-family:Montserrat;font-style:normal;font-display:swap;font-weight:300;src:local("Montserrat Light "),local("Montserrat-Light"),url(/static/montserrat-latin-300-d2ad295b60682a6537c358e06ea80c61.woff2) format("woff2"),url(/static/montserrat-latin-300-3a371ee0d175f5c2b15ce1d6b981dc4e.woff) format("woff")}@font-face{font-family:Montserrat;font-style:italic;font-display:swap;font-weight:300;src:local("Montserrat Light italic"),local("Montserrat-Lightitalic"),url(/static/montserrat-latin-300italic-f6b6bf2431003f8142e800f9df157989.woff2) format("woff2"),url(/static/montserrat-latin-300italic-16521668f5f238098329cdd7d27c391e.woff) format("woff")}@font-face{font-family:Montserrat;font-style:normal;font-display:swap;font-weight:400;src:local("Montserrat Regular "),local("Montserrat-Regular"),url(/static/montserrat-latin-400-240a84447b78da0920fcb07e378f2c5f.woff2) format("woff2"),url(/static/montserrat-latin-400-b20cc131034316b1c85d0498fb9ed5c5.woff) format("woff")}@font-face{font-family:Montserrat;font-style:italic;font-display:swap;font-weight:400;src:local("Montserrat Regular italic"),local("Montserrat-Regularitalic"),url(/static/montserrat-latin-400italic-86172bb829de6be08b92512096b6aca6.woff2) format("woff2"),url(/static/montserrat-latin-400italic-9405e78785a55cf0e4ea7669d4616ea9.woff) format("woff")}@font-face{font-family:Montserrat;font-style:normal;font-display:swap;font-weight:500;src:local("Montserrat Medium "),local("Montserrat-Medium"),url(/static/montserrat-latin-500-fb8d6b71dbe8d9294be43082936f649e.woff2) format("woff2"),url(/static/montserrat-latin-500-50825d47af7ae47e055018eb689c6c99.woff) format("woff")}@font-face{font-family:Montserrat;font-style:italic;font-display:swap;font-weight:500;src:local("Montserrat Medium italic"),local("Montserrat-Mediumitalic"),url(/static/montserrat-latin-500italic-c0a555a4f8e997385a3eebbd4da0b9ee.woff2) format("woff2"),url(/static/montserrat-latin-500italic-635de59c4be86285b1f70068c95b9816.woff) format("woff")}@font-face{font-family:Montserrat;font-style:normal;font-display:swap;font-weight:600;src:local("Montserrat SemiBold "),local("Montserrat-SemiBold"),url(/static/montserrat-latin-600-d5615136a08cfee70deb4be1ee1651df.woff2) format("woff2"),url(/static/montserrat-latin-600-f300da4fb4fe00e23915f62b2c643681.woff) format("woff")}@font-face{font-family:Montserrat;font-style:italic;font-display:swap;font-weight:600;src:local("Montserrat SemiBold italic"),local("Montserrat-SemiBolditalic"),url(/static/montserrat-latin-600italic-10f29d139edacde92df63374c5672568.woff2) format("woff2"),url(/static/montserrat-latin-600italic-2bc37d86a4ba12ce526c4af904a9946e.woff) format("woff")}@font-face{font-family:Montserrat;font-style:normal;font-display:swap;font-weight:700;src:local("Montserrat Bold "),local("Montserrat-Bold"),url(/static/montserrat-latin-700-7d77e1f03eefc452dab14d7f89080083.woff2) format("woff2"),url(/static/montserrat-latin-700-81826529772e52f0f14a4c73c2f2c7f1.woff) format("woff")}@font-face{font-family:Montserrat;font-style:italic;font-display:swap;font-weight:700;src:local("Montserrat Bold italic"),local("Montserrat-Bolditalic"),url(/static/montserrat-latin-700italic-1dd2b53f1567a29e0505de9b27c4352c.woff2) format("woff2"),url(/static/montserrat-latin-700italic-c162d257f5e9f9b108a96a604cfb2132.woff) format("woff")}@font-face{font-family:Montserrat;font-style:normal;font-display:swap;font-weight:800;src:local("Montserrat ExtraBold "),local("Montserrat-ExtraBold"),url(/static/montserrat-latin-800-d4e7bf86bbd8e5f43ca73fa831218648.woff2) format("woff2"),url(/static/montserrat-latin-800-895aadbff357be35ac8dd107c7975ee7.woff) format("woff")}@font-face{font-family:Montserrat;font-style:italic;font-display:swap;font-weight:800;src:local("Montserrat ExtraBold italic"),local("Montserrat-ExtraBolditalic"),url(/static/montserrat-latin-800italic-fc0cbe442f7b3733c91e982e825c4daa.woff2) format("woff2"),url(/static/montserrat-latin-800italic-b3362875067300abedb7a8fb97903258.woff) format("woff")}@font-face{font-family:Montserrat;font-style:normal;font-display:swap;font-weight:900;src:local("Montserrat Black "),local("Montserrat-Black"),url(/static/montserrat-latin-900-c8bdd772c0d1347720ff7e3fb72719f3.woff2) format("woff2"),url(/static/montserrat-latin-900-1b99ef78e627dd9bbd0ca4b5c0789547.woff) format("woff")}@font-face{font-family:Montserrat;font-style:italic;font-display:swap;font-weight:900;src:local("Montserrat Black italic"),local("Montserrat-Blackitalic"),url(/static/montserrat-latin-900italic-cb72c1f90f66c124fb897a75bec64c78.woff2) format("woff2"),url(/static/montserrat-latin-900italic-b78bb9f8ecec6c5a924c873f1818095f.woff) format("woff")}@font-face{font-family:Merriweather;font-style:normal;font-display:swap;font-weight:300;src:local("Merriweather Light "),local("Merriweather-Light"),url(/static/merriweather-latin-300-f015f1e9a46a3b9db4fd64564dacece4.woff2) format("woff2"),url(/static/merriweather-latin-300-92dfe81b725c342d31d962da975c07a6.woff) format("woff")}@font-face{font-family:Merriweather;font-style:italic;font-display:swap;font-weight:300;src:local("Merriweather Light italic"),local("Merriweather-Lightitalic"),url(/static/merriweather-latin-300italic-7fd86b32accf2df4403d1d4fa3a81502.woff2) format("woff2"),url(/static/merriweather-latin-300italic-878b76f59d5ba58dd1652dc8d2a0f4f9.woff) format("woff")}@font-face{font-family:Merriweather;font-style:normal;font-display:swap;font-weight:400;src:local("Merriweather Regular "),local("Merriweather-Regular"),url(/static/merriweather-latin-400-12dbf4c00ae43698f278b099e4b0ec9e.woff2) format("woff2"),url(/static/merriweather-latin-400-1fffad22b085a877995812dbf1d9ac08.woff) format("woff")}@font-face{font-family:Merriweather;font-style:italic;font-display:swap;font-weight:400;src:local("Merriweather Regular italic"),local("Merriweather-Regularitalic"),url(/static/merriweather-latin-400italic-1e0d3e8121d88969bfb153c8f174b758.woff2) format("woff2"),url(/static/merriweather-latin-400italic-de18d4c4e8e808a7248a185f866ff094.woff) format("woff")}@font-face{font-family:Merriweather;font-style:normal;font-display:swap;font-weight:700;src:local("Merriweather Bold "),local("Merriweather-Bold"),url(/static/merriweather-latin-700-dc8fec81a125fc63856587e6683da73b.woff2) format("woff2"),url(/static/merriweather-latin-700-d7d2ed8e58f303392cc3fc00ba3a9186.woff) format("woff")}@font-face{font-family:Merriweather;font-style:italic;font-display:swap;font-weight:700;src:local("Merriweather Bold italic"),local("Merriweather-Bolditalic"),url(/static/merriweather-latin-700italic-b7b7e5da4d7be8c12bd5a6c809edc8fc.woff2) format("woff2"),url(/static/merriweather-latin-700italic-6210a5fc1c54ca85a5d82aa85d7a9b5c.woff) format("woff")}@font-face{font-family:Merriweather;font-style:normal;font-display:swap;font-weight:900;src:local("Merriweather Black "),local("Merriweather-Black"),url(/static/merriweather-latin-900-43f870d543dd89fbeb66d417c0d97276.woff2) format("woff2"),url(/static/merriweather-latin-900-8f3806df74937c7b8b53f24ae1e725d1.woff) format("woff")}@font-face{font-family:Merriweather;font-style:italic;font-display:swap;font-weight:900;src:local("Merriweather Black italic"),local("Merriweather-Blackitalic"),url(/static/merriweather-latin-900italic-168c1ab28ed0e4e7d654334def288bc1.woff2) format("woff2"),url(/static/merriweather-latin-900italic-ae7778f01871e35ee142ef207b313b34.woff) format("woff")}</style><meta name="generator" content="Gatsby 2.0.59"/><link rel="alternate" type="application/rss+xml" href="/rss.xml"/><link rel="shortcut icon" href="/icons/icon-48x48.png"/><link rel="manifest" href="/manifest.webmanifest"/><meta name="theme-color" content="#663399"/><title data-react-helmet="true">How multiplayer game sync their state? (Part 2) | All models are wrong</title><meta data-react-helmet="true" name="description" content="Recap In  part 1 of the series , we discussed the following: Challenges faced in multiplayer game How to solve unresponsive UI by client…"/><style id="typography.js">html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,details,figcaption,figure,footer,header,main,menu,nav,section,summary{display:block}audio,canvas,progress,video{display:inline-block}audio:not([controls]){display:none;height:0}progress{vertical-align:baseline}[hidden],template{display:none}a{background-color:transparent;-webkit-text-decoration-skip:objects}a:active,a:hover{outline-width:0}abbr[title]{border-bottom:none;text-decoration:underline;text-decoration:underline dotted}b,strong{font-weight:inherit;font-weight:bolder}dfn{font-style:italic}h1{font-size:2em;margin:.67em 0}mark{background-color:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}img{border-style:none}svg:not(:root){overflow:hidden}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}figure{margin:1em 40px}hr{box-sizing:content-box;height:0;overflow:visible}button,input,optgroup,select,textarea{font:inherit;margin:0}optgroup{font-weight:700}button,input{overflow:visible}button,select{text-transform:none}[type=reset],[type=submit],button,html [type=button]{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}legend{box-sizing:border-box;color:inherit;display:table;max-width:100%;padding:0;white-space:normal}textarea{overflow:auto}[type=checkbox],[type=radio]{box-sizing:border-box;padding:0}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-cancel-button,[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-input-placeholder{color:inherit;opacity:.54}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}html{font:100%/1.75 'Merriweather','Georgia',serif;box-sizing:border-box;overflow-y:scroll;}*{box-sizing:inherit;}*:before{box-sizing:inherit;}*:after{box-sizing:inherit;}body{color:hsla(0,0%,0%,0.9);font-family:'Merriweather','Georgia',serif;font-weight:400;word-wrap:break-word;font-kerning:normal;-moz-font-feature-settings:"kern", "liga", "clig", "calt";-ms-font-feature-settings:"kern", "liga", "clig", "calt";-webkit-font-feature-settings:"kern", "liga", "clig", "calt";font-feature-settings:"kern", "liga", "clig", "calt";}img{max-width:100%;margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;}h1{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;color:inherit;font-family:Montserrat,sans-serif;font-weight:900;text-rendering:optimizeLegibility;font-size:2.5rem;line-height:1.1;}h2{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;color:inherit;font-family:'Merriweather','Georgia',serif;font-weight:900;text-rendering:optimizeLegibility;font-size:1.73286rem;line-height:1.1;}h3{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;color:inherit;font-family:'Merriweather','Georgia',serif;font-weight:900;text-rendering:optimizeLegibility;font-size:1.4427rem;line-height:1.1;}h4{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;color:inherit;font-family:'Merriweather','Georgia',serif;font-weight:900;text-rendering:optimizeLegibility;font-size:1rem;line-height:1.1;letter-spacing:0.140625em;text-transform:uppercase;}h5{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;color:inherit;font-family:'Merriweather','Georgia',serif;font-weight:900;text-rendering:optimizeLegibility;font-size:0.83255rem;line-height:1.1;}h6{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;color:inherit;font-family:'Merriweather','Georgia',serif;font-weight:900;text-rendering:optimizeLegibility;font-size:0.75966rem;line-height:1.1;font-style:italic;}hgroup{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;}ul{margin-left:1.75rem;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;list-style-position:outside;list-style-image:none;list-style:disc;}ol{margin-left:1.75rem;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;list-style-position:outside;list-style-image:none;}dl{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;}dd{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;}p{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;}figure{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;}pre{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;font-size:0.85rem;line-height:1.75rem;}table{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;font-size:1rem;line-height:1.75rem;border-collapse:collapse;width:100%;}fieldset{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;}blockquote{margin-left:-1.75rem;margin-right:1.75rem;margin-top:0;padding-bottom:0;padding-left:1.42188rem;padding-right:0;padding-top:0;margin-bottom:1.75rem;font-size:1.20112rem;line-height:1.75rem;color:hsla(0,0%,0%,0.59);font-style:italic;border-left:0.32813rem solid hsla(0,0%,0%,0.9);}form{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;}noscript{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;}iframe{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;}hr{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:calc(1.75rem - 1px);background:hsla(0,0%,0%,0.2);border:none;height:1px;}address{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;}b{font-weight:700;}strong{font-weight:700;}dt{font-weight:700;}th{font-weight:700;}li{margin-bottom:calc(1.75rem / 2);}ol li{padding-left:0;}ul li{padding-left:0;}li > ol{margin-left:1.75rem;margin-bottom:calc(1.75rem / 2);margin-top:calc(1.75rem / 2);}li > ul{margin-left:1.75rem;margin-bottom:calc(1.75rem / 2);margin-top:calc(1.75rem / 2);}blockquote *:last-child{margin-bottom:0;}li *:last-child{margin-bottom:0;}p *:last-child{margin-bottom:0;}li > p{margin-bottom:calc(1.75rem / 2);}code{font-size:0.85rem;line-height:1.75rem;}kbd{font-size:0.85rem;line-height:1.75rem;}samp{font-size:0.85rem;line-height:1.75rem;}abbr{border-bottom:1px dotted hsla(0,0%,0%,0.5);cursor:help;}acronym{border-bottom:1px dotted hsla(0,0%,0%,0.5);cursor:help;}abbr[title]{border-bottom:1px dotted hsla(0,0%,0%,0.5);cursor:help;text-decoration:none;}thead{text-align:left;}td,th{text-align:left;border-bottom:1px solid hsla(0,0%,0%,0.12);font-feature-settings:"tnum";-moz-font-feature-settings:"tnum";-ms-font-feature-settings:"tnum";-webkit-font-feature-settings:"tnum";padding-left:1.16667rem;padding-right:1.16667rem;padding-top:0.875rem;padding-bottom:calc(0.875rem - 1px);}th:first-child,td:first-child{padding-left:0;}th:last-child,td:last-child{padding-right:0;}blockquote > :last-child{margin-bottom:0;}blockquote cite{font-size:1rem;line-height:1.75rem;color:hsla(0,0%,0%,0.9);font-weight:400;}blockquote cite:before{content:"— ";}ul,ol{margin-left:0;}@media only screen and (max-width:480px){ul,ol{margin-left:1.75rem;}blockquote{margin-left:-1.3125rem;margin-right:0;padding-left:0.98438rem;}}h1,h2,h3,h4,h5,h6{margin-top:3.5rem;}a{box-shadow:0 1px 0 0 currentColor;color:#007acc;text-decoration:none;}a:hover,a:active{box-shadow:none;}mark,ins{background:#007acc;color:white;padding:0.10938rem 0.21875rem;text-decoration:none;}a.gatsby-resp-image-link{box-shadow:none;}</style><link as="script" rel="preload" href="/component---src-templates-blog-post-js-d7279fd99db6cff4818f.js"/><link as="script" rel="preload" href="/1-c7b605c06deec4b4d639.js"/><link as="script" rel="preload" href="/0-230cf604340c5b14c227.js"/><link as="script" rel="preload" href="/app-faa7d67a8f1732e7e5d9.js"/><link as="script" rel="preload" href="/webpack-runtime-99f24b20623d3af66099.js"/><link rel="preload" href="/static/d/167/path---multiplayer-game-2-c-77-d74-knektsuahLFmC26cnxqn8eMP3M.json" as="fetch" crossOrigin="use-credentials"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" role="group"><div style="margin-left:auto;margin-right:auto;max-width:61.25rem;padding:2.625rem 1.3125rem"><h3 style="font-family:Montserrat, sans-serif;margin-top:0;margin-bottom:-1.75rem"><a style="box-shadow:none;text-decoration:none;color:inherit" href="/">All models are wrong</a></h3><h1>How multiplayer game sync their state? (Part 2)</h1><p style="font-size:0.83255rem;line-height:1.75rem;display:block;margin-bottom:1.75rem;margin-top:-1.75rem">May 01, 2017</p><div><h2><span style="text-decoration: underline;">Recap</span></h2>
+<p>In <a href="./multiplayer-game1">part 1 of the series</a>, we discussed the following:</p>
+<ul>
+<li>Challenges faced in multiplayer game</li>
+<li>How to solve unresponsive UI by client predictions</li>
+</ul>
+<p>I did however gloss over essential server implementation details, which
+we will focus on in this article.</p>
+<p><strong>Disclaimer: I am not a professional game developer, most of
+the knowledge shared is based on what I read and my experience of
+small hobby projects. The main goal of this article is to provide
+an easy to understand introduction for networking in a multiplayer 
+game.</strong></p>
+<h2><span style="text-decoration: underline;">What’s the role of server?</span></h2>
+<p>Let’s start by defining what a server should do, typically a server should serve as</p>
+<p><strong>a) Connection point for players</strong></p>
+<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">In a multiplayer game, players need to access a common endpoint
+to reach each other, this is one of the roles of a server
+program, even in the P2P communication model, there will be a
+connection point for players to exchange their network
+information before a P2P connection can be established.</code></pre></div>
+<p><strong>b) Processing unit</strong></p>
+<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">In many cases, the server runs the game simulation code, process all
+inputs from player and updates the game state. Note that this is not
+always the case, some modern games offload lots of processing to the
+client side. In this article we will assume it&#39;s the server&#39;s
+responsibility to process the game, ie. Make the game tick.</code></pre></div>
+<p><strong>c) Single source of truth on game state</strong></p>
+<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">In many multiplayer games, the server program also has authority on 
+game state, the main reason is to prevent cheating, and it&#39;s also
+easier to reason about when there&#39;s is a single point to get the
+correct game state.</code></pre></div>
+<h2><span style="text-decoration: underline;">Naive Server Implementation</span></h2>
+<p>Let’s start to implement the server in the most straightforward fashion,
+then improve from there.</p>
+<p>The core of the game server is a loop that keeps updating the GameState
+using a player’s input, commonly know as a TICK, the function signature
+is as follows:</p>
+<blockquote>
+<p><span style="color: #ff6600;">(STATE<sub>n</sub> , INPUT<sub>n</sub>) => STATE<sub>n+1</sub></span></p>
+</blockquote>
+<p>A simplified server code snippet would looks like this</p>
+<h3><span style="text-decoration: underline;">Discussion</span></h3>
+<p>I hope the code snippets look intuitive and straightforward, the server simply take all inputs from the buffer and applies them in the next <code class="language-text">TICK</code> function to get new GameState. Let’s call this approach <code class="language-text">Greedy Game Loop</code>, as it tries to process things as fast as it could. It is all good, until we think about our lovely universe where sunlight takes 8 minutes to  reach the earth. </p>
+<p>Latency strikes again!</p>
+<p><img src="https://cdn2.hubspot.net/hubfs/323094/qingwei/speed_of_light_meme.jpg" title="speed_of_light_meme.jpg"></p>
+<p>The fact that the server processes all input from buffer in every <code class="language-text">TICK</code>,
+means the GameState will depends on network latency. Diagram
+below illustrates why this is a problem</p>
+<p><img src="https://github.com/buaya91/image-storage/blob/master/multiplayer-game-networking/server-side-latency-issue-single.png?raw=true"></p>
+<p>The image shows 2 clients sending inputs to server, we observe 2
+interesting facts.</p>
+<ol>
+<li>Requests took different time from different client to server, 
+<strong>1</strong> unit of time from <span style="background-color: #fab9d9;">Client A</span> to <span style="background-color: #ccffcc;">Server</span>,  <strong>1.5</strong> unit of time from <span style="background-color: #ccffff;">Client B</span> to <span style="background-color: #ccffcc;">Server</span></li>
+<li>Requests took different time from same client to server,
+1st request took <strong>1</strong> unit of time, 2nd request took <strong>2</strong> unit of time.</li>
+</ol>
+<p>In short, latency is inconsistent, even on the same connection.</p>
+<p>Inconsistent latency combined with <strong><code class="language-text">Greedy Game Loop</code></strong> gives several problems, let look at these further.</p>
+<table style="border-color: #000000; background-color: #ffffff;" border="3" cellpadding="5">
+    <tbody>
+        <tr>
+            <td>
+                <h4 style="padding-left: 30px;">Client Side Prediction will&nbsp;not work</h4>
+            </td>
+            <td>
+                <p style="text-align: left;">
+                    <span style="font-size: 13px;">
+                    If&nbsp;we cannot predict when the&nbsp;server would
+                    receive input (due to latency), we can't make any
+                    predictions with high accuracy. (Forgot how Client
+                    Side Prediction works? read&nbsp;
+                    <a href="http://www.cakesolutions.net/teamblogs/how-does-multiplayer-game-sync-their-state-part-1#client-side-prediction">here</a>)
+                    </span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h4 style="padding-left: 30px;">Low latency players&nbsp;get advantages</h4>
+            </td>
+            <td style="width: 642px;">
+                <span style="font-size: 13px;">
+                If input takes a shorter time to reach server, it will
+                be processed sooner, creating unfair advantage for
+                players with fast networks. eg. Two players
+                shoot&nbsp;each other at the same time,
+                they are supposed to kill each other at the same time,
+                but Player B has a lower latency thus killed Player A
+                before Player A's&nbsp;command is processed.
+                </span>
+            </td>
+         </tr>
+    </tbody>
+</table>
+<p>There is a simple solution to mitigate inconsistent latency,
+<a href="./multiplayer-game1#lockstep">Lockstep State Update</a> that we discussed in the previous article. The idea is that server does not proceed until it received input from all players, it has 2 benefits:</p>
+<ul>
+<li>it does not require client side prediction</li>
+<li>all players will appear to have the same latency as the slowest
+player, removing the advantage we mentioned</li>
+</ul>
+<p>However, it does not work for fast-paced action games as the
+responsiveness is low. (More details can be found on previous article,
+thus I will not repeat here.)</p>
+<p>Next section, we will talk about how to make the server side work for
+fast paced games.</p>
+<h2><span style="text-decoration: underline;">Server Reconcilation</span></h2>
+<p>To solve the problem of inaccurate client side predictions, 
+we need to make the client-server interaction more predictable 
+from the client point of view. When a Player presses a key on client
+side, the client program needs to know when this input would being
+processed on server side.</p>
+<p>One possible way is to <strong>let the client suggest when the input should
+be applied</strong>, this way, client side would be able to predict it
+reliably. The term <code class="language-text">suggest</code> is used as server might reject the
+suggestion if it’s invalid, for example trying to cast a magic when 
+your magic power is empty.</p>
+<p>The input should be applied shortly after user input, ie.
+<span style="color: #993366;"><strong>T<sub>input</sub> + X</strong></span>,
+where X is the delay. The exact value depends on game, normally less
+than 100ms to be responsive. Note X can also be zero, in this case
+it should happen immediately after user provides input.</p>
+<p>Let’s say we choose X = 30ms, which translates into roughly 1 frame
+for 30fps (frame per second), and it takes 150ms for input to travel
+to server, there’s a good chance when input reaches the server,
+the target frame for input had passed.</p>
+<p><img src="https://github.com/buaya91/image-storage/blob/master/multiplayer-game-networking/server-side-independent-latency.png?raw=true"></p>
+<p>Looking at the diagram, User A pressed a key at <strong>T</strong>, which supposed
+to be processed at <strong>T + 30ms</strong>, but the input is received by server
+at <strong>T + 150ms</strong>, due to latency, which already passed <strong>T + 30ms</strong>.
+This is the problem we are going to solve in this section</p>
+<blockquote>
+<p><strong>How does server apply input that should happen in the past?</strong></p>
+</blockquote>
+<h3><span style="text-decoration: underline;">The Concept</span></h3>
+<p>You might have recalled client side prediction has a similar issue of
+incorrect predictions due to lacking information of opponents, and
+the incorrect predictions will later be corrected by state updates
+from server using <strong><a href="./multiplayer-game1#reconcilation">Reconcilation</a></strong>.
+The same technique can be used here, the only difference is that
+we are correcting the GameState on server using user input from clients.</p>
+<p>All user input needs to be tagged with a timestamp, this timestamp will then be used to tell the server when to process this input.</p>
+<p><img src="https://github.com/buaya91/image-storage/blob/master/multiplayer-game-networking/server-side-reconcilation1.png?raw=true"></p>
+<p><sub>Note: On the first dotted line, it’s <span style="color: #000000;"><strong>Time X</strong></span> on Client side, but <span style="color: #000000;"><strong>Time Y</strong></span> on Server side, this is an interesting nature of multiplayer game (and many other distributed system), as client and server <g class="gr_ gr_201 gr-alert gr_gramm gr_inline_cards gr_run_anim Grammar multiReplace" id="201" data-gr-id="201">runs</g> independently, the time of client and server typically will be different,  our algorithm will handle the difference.</sub></p>
+<p>Diagram above shows interaction between 1 Client and the Server,</p>
+<ol>
+<li>Client sends an Input with timestamp telling server this input of
+Client A should happen on <span style="color: #ff0000;">Time X</span>. </li>
+<li>Server received the request on <span style="color: #008000;">Time Y</span>,
+let’s assume Time X is older than Time Y for the sake of discussion.
+When developing our algorithm, we should not
+assume <span style="color: #008000;">Time Y</span> is bigger or less
+than <span style="color: #ff0000;">Time X<span style="color: #000000;">,
+this will give us more flexibility.</span></span></li>
+<li><span style="color: #ff0000;"><span style="color: #000000;">
+The <span style="color: #ff0000;"><strong>RED BOX</strong></span> is where
+reconcilation happens, the server needs to apply the Input X to the
+latest game state so that it appears that input X happens
+on <span style="color: #ff0000;">Time X</span>.</li>
+<li>GameState from server also includes timestamp, which is required 
+for both server side and client side reconcilation.</li>
+</ol>
+<h4>Details of Reconcilation (<strong><span style="color: #ff0000;">the RED BOX</span></strong>)</h4>
+<ol>
+<li>
+<p>Server needs to maintain</p>
+<ul>
+<li><strong><span style="color: #000000;">GameStateHistory        </span></strong><span style="color: #000000;">- history of GameState within a time frame <strong>P</strong>, eg. all GameState since a second ago</span></li>
+<li><strong>ProcessedUserInput</strong> - history of UserInput processed within a time frame <strong>P</strong>, ie. same value as time frame of GameStateHistory</li>
+<li><strong>UnprocessedUserInput</strong> - UserInput received, but not processed yet, also within time frame <strong>P</strong>
+<img src="https://github.com/buaya91/image-storage/blob/master/multiplayer-game-networking/server-buffer0.png?raw=true"></li>
+</ul>
+</li>
+<li>
+<p>When server received an input from user, it should be inserted into the <strong>UnprocessedUserInput</strong>.</p>
+<p><img src="https://github.com/buaya91/image-storage/blob/master/multiplayer-game-networking/server-buffer1.png?raw=true"></p>
+</li>
+<li>
+<p>Next, when server ticks, </p>
+<ol>
+<li>Check if there is any user input in the <strong>UnprocessedUserInput</strong> which is older than the current frame</li>
+<li>If not, you are good, simply run the game logic with latest GameState and corresponding Inputs (if any), and broadcast to clients.</li>
+<li>If yes, it means some of the game states generated previously are wrong due to missing information, we need to correct it</li>
+<li>First we need to find the oldest unprocessed user input, let say it is on Time N, (Tips: this operation is fast if the **UnprocessedUserInput **is sorted).</li>
+<li>Then we need to obtain the corresponding GameState on Time N from <strong>GameStateHistory</strong>, and the processed user input on Time N from <strong>ProcessedUserInput</strong></li>
+<li>Using these 3 pieces of data, we can create a new GameState which is more accurate.
+<img src="https://github.com/buaya91/image-storage/blob/master/multiplayer-game-networking/server-buffer2.png?raw=true"></li>
+<li>Then move the Unprocessed Input N to ProcessedUserInput, so that we can use it for reconcilation in the future.</li>
+<li>Update the GameState N in <strong>GameStateHistory</strong></li>
+<li>Repeat step 4 to 7, for <code class="language-text">N+1, N+2 ...</code>, until we get latest GameState.</li>
+<li>Server sends out the latest frame to all players. </li>
+</ol>
+</li>
+</ol>
+<h3><span style="text-decoration: underline;">Discussion</span></h3>
+<p>Server side reconcilation suffers similar problems as client side
+reconcilation, when we reconcile, it means we did something wrong,
+and we are correcting by changing history. This means we cannot apply
+irreversible outcomes, i.e, killing a players, such irreversible
+outcomes will only be applied when it goes out of the
+<strong>GameStateHistory</strong>, ie. when it cannot be rewriten anymore.</p>
+<p>In addition, the incorrect GameState sometime causes awful UI jump.
+Diagram below illustrate how it happens</p>
+<p><img src="https://github.com/buaya91/image-storage/blob/master/multiplayer-game-networking/server-error0.png?raw=true"></p>
+<p>Entity starts at top left corner, it is moving toward
+right hand side, 5 ticks later, it shifted towards right, but
+then server received the user input saying that the entity changed
+direction on Tick N, so the server reconciles the game state, and
+now suddenly the entity <strong>jumps</strong> to the bottom left on the canvas.</p>
+<p>I might be exaggerating the effect, sometimes entity does not move
+that much, thus the jump would less obvious, but it is still noticeable
+in many cases. We can control the jump by changing the size
+of <strong>GameStateHistory</strong>, <strong>UnprocessedUserInput</strong> and <strong>ProcessedUserInput</strong>,
+the smaller the buffer size, the less jump there would be, because
+we would be less tolerant on input that arrives late, eg. If Input
+that is late for more than 100ms is ignored, player with ping > 200ms
+wont be able to play the game.</p>
+<blockquote>
+<p>We can trade <strong>network latency tolerance</strong> for more <strong>accurate game state update</strong>,
+or vice versa.</p>
+</blockquote>
+<p>One popular technique to overcome the problem of inaccurate Game State 
+is <strong>Entity Interpolation</strong>, the idea is to smoothen the jump by
+spreading it out within a short amount of time.</p>
+<p><img src="https://github.com/buaya91/image-storage/blob/master/multiplayer-game-networking/server-error1.png?raw=true"></p>
+<p>I will not include implementation details of <strong>Entity Interpolation</strong>
+in this article, however some references will be provided at the bottom of article.</p>
+<h2><span style="text-decoration: underline;">Wrapping Up</span></h2>
+<p>We have talked about how both client and server might work in a multiplayer game.</p>
+<p><img src="https://github.com/buaya91/image-storage/blob/master/multiplayer-game-networking/wrapup.png?raw=true">In general, a multiplayer game has 3 loosely coupled loops, <strong>Server Game Loop</strong>, <strong><g class="gr_ gr_149 gr-alert gr_spell gr_inline_cards gr_run_anim ContextualSpelling ins-del multiReplace" id="149" data-gr-id="149">Client side</g> prediction Loop</strong>, and <strong><g class="gr_ gr_150 gr-alert gr_spell gr_inline_cards gr_run_anim ContextualSpelling ins-del multiReplace" id="150" data-gr-id="150">Client side</g> UI Rendering Loop</strong>. By having some sort of buffer in between them, their execution can be decoupled, giving us <g class="gr_ gr_205 gr-alert gr_gramm gr_inline_cards gr_run_anim Grammar multiReplace" id="205" data-gr-id="205">flexibility</g> to create better gaming experience.</p>
+<h2><span style="text-decoration: underline;">Conclusion</span></h2>
+<p>Here ends my article on Multiplayer games, I learned much of this
+knowledge from experts in this field, building a 
+<a href="https://github.com/buaya91/scalajs-snake">simple multiplayer game</a> also helps a lot.
+I’ve only show one way to implement a multiplayer server,
+there are more other ways, depending on what kind of game you’re
+building, I encourage you to explore some of those ideas by building a simple game.</p>
+<p>Thanks for reading, happy hacking !</p>
+<h2><span style="text-decoration: underline;"><strong>References and Further Reading</strong></span></h2>
+<ul>
+<li>[Entity Interpolation] - <a href="http://www.gabrielgambetta.com/fpm3.html">http://www.gabrielgambetta.com/fpm3.html</a></li>
+<li><a href="http://gafferongames.com/networked-physics/snapshots-and-interpolation/"><span>[Entity Interpolation] - </span>http://gafferongames.com/networked-physics/snapshots-and-interpolation/</a></li>
+<li>[Lag Compensation] - <a href="https://developer.valvesoftware.com/wiki/Source_Multiplayer_Networking#Lag_compensation">https://developer.valvesoftware.com/wiki/Source<em>Multiplayer</em>Networking#Lag_compensation</a></li>
+</ul></div><hr style="margin-bottom:1.75rem"/><div style="display:flex;margin-bottom:4.375rem"><p>I write stuff so that I can forget.</p></div><ul style="display:flex;flex-wrap:wrap;justify-content:space-between;list-style:none;padding:0"><li><a rel="prev" href="/meetings/">← <!-- -->Fantastic meetings and where to find them</a></li><li><a rel="next" href="/scalameta-tut/">Scalameta tutorial: Cache decorator<!-- --> →</a></li></ul></div></div></div><script>
+  
+  
+  if(true) {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  }
+  if (typeof ga === "function") {
+    ga('create', 'undefined', 'auto', {});
+      
+      }
+      </script><script id="gatsby-script-loader">/*<![CDATA[*/window.page={"componentChunkName":"component---src-templates-blog-post-js","jsonName":"multiplayer-game-2-c77","path":"/multiplayer-game2/"};window.dataPath="167/path---multiplayer-game-2-c-77-d74-knektsuahLFmC26cnxqn8eMP3M";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app.a03716562d1e590f30ef.css","/app-faa7d67a8f1732e7e5d9.js"],"component---node-modules-gatsby-plugin-offline-app-shell-js":["/component---node-modules-gatsby-plugin-offline-app-shell-js-08b9c03de089ca176e47.js"],"component---src-templates-blog-post-js":["/component---src-templates-blog-post-js-d7279fd99db6cff4818f.js"],"component---src-pages-404-js":["/component---src-pages-404-js-1f451fde61804cd588c2.js"],"component---src-pages-index-js":["/component---src-pages-index-js-a256a7699c98792a7e33.js"]};/*]]>*/</script><script src="/webpack-runtime-99f24b20623d3af66099.js" async=""></script><script src="/app-faa7d67a8f1732e7e5d9.js" async=""></script><script src="/0-230cf604340c5b14c227.js" async=""></script><script src="/1-c7b605c06deec4b4d639.js" async=""></script><script src="/component---src-templates-blog-post-js-d7279fd99db6cff4818f.js" async=""></script></body></html>

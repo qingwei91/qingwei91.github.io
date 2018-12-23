@@ -1,0 +1,687 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[All models are wrong]]></title><description><![CDATA[I write stuff so I don't have to remember]]></description><link>https://gatsby-starter-blog-demo.netlify.com/</link><generator>RSS for Node</generator><lastBuildDate>Sun, 23 Dec 2018 18:55:08 GMT</lastBuildDate><item><title><![CDATA[Scalameta tutorial: Cache decorator]]></title><description><![CDATA[This is a tutorial to show how to use Scalameta to develop a  generic, parameterized annotation .
+To know how to setup a project to use…]]></description><link>https://gatsby-starter-blog-demo.netlify.com//scalameta-tut/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com//scalameta-tut/</guid><pubDate>Sat, 06 May 2017 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;This is a tutorial to show how to use Scalameta to develop a &lt;strong&gt;generic, parameterized annotation&lt;/strong&gt;.
+To know how to setup a project to use &lt;code class=&quot;language-text&quot;&gt;scalameta&lt;/code&gt;, refer to &lt;a href=&quot;http://scalameta.org/tutorial/#Setup&quot;&gt;official docs&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;What is scalameta?&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;http://scalameta.org/&quot;&gt;Scala-meta&lt;/a&gt; is the de-facto toolkit for metaprogramming in Scala. For those who are new to metaprogramming, it means programming against code/syntax/&lt;a href=&quot;https://en.wikipedia.org/wiki/Abstract_syntax_tree&quot;&gt;AST&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Metaprogramming is very useful when you notice a repeating pattern in your code, but you are not able to refactor it due to limitations of the programming language.&lt;/p&gt;
+&lt;p&gt;Conceptually, scalameta allows you to access your code as data (Abstract Syntax Tree), and manipulate it at compile time.&lt;/p&gt;
+&lt;h2&gt;Problem: Caching&lt;/h2&gt;
+&lt;p&gt;Caching is a common technique that almost all programmers are familiar with. In this tutorial, we will develop a &lt;code class=&quot;language-text&quot;&gt;cache&lt;/code&gt; macro that&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;has low syntatic overhead, ie. it should not change the cached function much&lt;/li&gt;
+&lt;li&gt;able to support different cache storage, eg. In memory cache, elastic search etc&lt;/li&gt;
+&lt;li&gt;able to cache methods with multiple arguments&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Naive implementation&lt;/h2&gt;
+&lt;p&gt;Let’s start with a simple implementation without using macro&lt;/p&gt;
+&lt;p&gt;Code to support cache function&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;scala&quot;&gt;&lt;pre class=&quot;language-scala&quot;&gt;&lt;code class=&quot;language-scala&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; CacheBackEnd&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;K&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; V&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt; map &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; mutable&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Map&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;K&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; V&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;     &lt;span class=&quot;token comment&quot;&gt;// ignore the fact it is not thread safe&lt;/span&gt;
+
+  &lt;span class=&quot;token comment&quot;&gt;// `compute` is a function, only evaluated in case of cache miss&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; getOrElse&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;k&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; K&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; compute&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; K &lt;span class=&quot;token keyword&quot;&gt;=&gt;&lt;/span&gt; V&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; V &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    map&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;k&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;case&lt;/span&gt; Some&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;v&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;=&gt;&lt;/span&gt; v       &lt;span class=&quot;token comment&quot;&gt;// cache hit&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;case&lt;/span&gt; None &lt;span class=&quot;token keyword&quot;&gt;=&gt;&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; v &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; compute&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;k&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        map &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; map &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;k &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; v&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        v
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; cache&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;K&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; V&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;fn&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; K &lt;span class=&quot;token keyword&quot;&gt;=&gt;&lt;/span&gt; V&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;cacheStorage&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; CacheBackEnd&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;K&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; V&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; K &lt;span class=&quot;token keyword&quot;&gt;=&gt;&lt;/span&gt; V &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;k&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; K&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;=&gt;&lt;/span&gt;
+    cacheStorage&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;getOrElse&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;k&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; fn&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Calling cache function&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;scala&quot;&gt;&lt;pre class=&quot;language-scala&quot;&gt;&lt;code class=&quot;language-scala&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// this is slow .....&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; fib&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;i&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; i &lt;span class=&quot;token keyword&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;case&lt;/span&gt; n &lt;span class=&quot;token keyword&quot;&gt;=&gt;&lt;/span&gt; fib&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;n &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; fib&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;n &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; cacheBackend &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; CacheBackEnd&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token builtin&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; cachedFib&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;i&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; cache&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;fib&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;cacheBackend&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;i&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;// alternatively, we can inline the logic&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; cachedFib&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;i&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; cache &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;case&lt;/span&gt; n &lt;span class=&quot;token keyword&quot;&gt;=&gt;&lt;/span&gt; fib&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;n &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; fib&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;n &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;cacheBackend&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;i&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;Analysis&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Pros&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;it’s simple and easy to understand&lt;/li&gt;
+&lt;li&gt;it supports different cache storage&lt;/li&gt;
+&lt;li&gt;able to work on methods of different arguments&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Cons&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;It is a bit intrusive, notice the implementation of &lt;code class=&quot;language-text&quot;&gt;cachedFib&lt;/code&gt; needs to be changed&lt;/li&gt;
+&lt;li&gt;It is awkward to work with functions with multiple arguments, because our CacheBackend can only takes in &lt;code class=&quot;language-text&quot;&gt;K, V&lt;/code&gt; as type param, so if you have a function with signature &lt;code class=&quot;language-text&quot;&gt;def fn(x: Int, y: Int): Int&lt;/code&gt; , you need to combine &lt;code class=&quot;language-text&quot;&gt;x&lt;/code&gt; and &lt;code class=&quot;language-text&quot;&gt;y&lt;/code&gt; into &lt;code class=&quot;language-text&quot;&gt;(Int, Int)&lt;/code&gt; so that it fit into CacheBackend’s type signature&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Let’s see how we can improve it using scala meta.&lt;/p&gt;
+&lt;h2&gt;Scalameta Implementation 1&lt;/h2&gt;
+&lt;p&gt;Here, we are going to implement cache function as a macro, the end goal is to support syntax like this&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;scala&quot;&gt;&lt;pre class=&quot;language-scala&quot;&gt;&lt;code class=&quot;language-scala&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// the signature is slightly different, as our macro need to access `get` and `put` method, but not `getOrElse`&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;// you can implement both signature though&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;trait&lt;/span&gt; SyncCache&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;K&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; V&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; get&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;k&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; K&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Option&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;V&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; put&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;k&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; K&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; v&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; V&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;Unit&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; cacheBackend &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; SyncCache&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token builtin&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+
+&lt;span class=&quot;token annotation punctuation&quot;&gt;@cache&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;cacheBackend&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; fib&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;i&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; i &lt;span class=&quot;token keyword&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;case&lt;/span&gt; n &lt;span class=&quot;token keyword&quot;&gt;=&gt;&lt;/span&gt; fib&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;n &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; fib&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;n &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Before we jump into implementation, we can observe a few difference with previous implementation&lt;/p&gt;
+&lt;h3&gt;Observations&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;The syntax is cleaner, it does not change the method’s definition at all&lt;/li&gt;
+&lt;li&gt;It also supports different cache storage&lt;/li&gt;
+&lt;li&gt;Too much MAGIC, how does it even work?&lt;/li&gt;
+&lt;li&gt;Does it support function with multiple arguments?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Let’s answer the 1st question, how does it works?&lt;/p&gt;
+&lt;p&gt;Below is the implementation of the &lt;code class=&quot;language-text&quot;&gt;cache&lt;/code&gt; macro, let’s go through the comments to understand what it does&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;scala&quot;&gt;&lt;pre class=&quot;language-scala&quot;&gt;&lt;code class=&quot;language-scala&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// @param backend - parameter for `cache` annotation&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; cache&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;K&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; V&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;backend&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; SyncCache&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;K&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; V&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;extends&lt;/span&gt; scala&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;annotation&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;StaticAnnotation &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token comment&quot;&gt;// @param defn - the annotated method (it can also be other scala building block like class, but we are restricting here&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;//               using some checks below&lt;/span&gt;
+  inline &lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; apply&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;defn&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;Any&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;Any&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; meta &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+    defn &lt;span class=&quot;token keyword&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token comment&quot;&gt;// this annotation should only be annotate on `method`, represented as `Defn.Def` in scalameta&apos;s AST&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;case&lt;/span&gt; defn&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Defn&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Def &lt;span class=&quot;token keyword&quot;&gt;=&gt;&lt;/span&gt;
+
+        &lt;span class=&quot;token comment&quot;&gt;// this represent the instatiated annotation, ie. `@cache(xxx)`&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+          &lt;span class=&quot;token comment&quot;&gt;// Quasiquote in action, it&apos;s a way to pattern match scala AST&lt;/span&gt;
+          &lt;span class=&quot;token comment&quot;&gt;//  - `new`               match instantiation&lt;/span&gt;
+          &lt;span class=&quot;token comment&quot;&gt;//  - `$_`                match the name of the annotation&lt;/span&gt;
+          &lt;span class=&quot;token comment&quot;&gt;//  - `[..$tpr]`          match type params and bind to `tpr`&lt;/span&gt;
+          &lt;span class=&quot;token comment&quot;&gt;//  - `($backendParam)`   match SINGLE argument used in instatiation and bind to `backendParam`&lt;/span&gt;
+          &lt;span class=&quot;token comment&quot;&gt;//                        Note: To match multiple arguments or multiple arguments list (curried), you need different                                           syntax&lt;/span&gt;
+          &lt;span class=&quot;token keyword&quot;&gt;case&lt;/span&gt; q&lt;span class=&quot;token string&quot;&gt;&quot;new $_[..$tpr]($backendParam)&quot;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;=&gt;&lt;/span&gt;
+
+            &lt;span class=&quot;token comment&quot;&gt;// we use the element we captured to generate code we want, we will look into details next&lt;/span&gt;
+            &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; body&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Term &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; CacheMacroImpl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;expand&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;tpr&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; backendParam&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; defn&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+            &lt;span class=&quot;token comment&quot;&gt;// we only want to replace the method body, so this will do&lt;/span&gt;
+            defn&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;copy&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;body &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; body&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;token keyword&quot;&gt;case&lt;/span&gt; x &lt;span class=&quot;token keyword&quot;&gt;=&gt;&lt;/span&gt;
+            abort&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;s&lt;span class=&quot;token string&quot;&gt;&quot;Unrecognized pattern $x&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+      &lt;span class=&quot;token keyword&quot;&gt;case&lt;/span&gt; _ &lt;span class=&quot;token keyword&quot;&gt;=&gt;&lt;/span&gt;
+        abort&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;This annotation only works on `def`&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;    &lt;span class=&quot;token comment&quot;&gt;// abort if annotated to anything other than methods&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;So here is quite some amount of info, especially around quasiquote. You might have a few questions, like what is the type signature of &lt;code class=&quot;language-text&quot;&gt;tpr&lt;/code&gt; that we’ve captured? I will go through them in next section, but here I wish you get familiar with the general flow, basically we are trying to&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;use pattern matching to capture relevant information from the AST [Compile Time]&lt;/li&gt;
+&lt;li&gt;perform transformation on the AST [Compile Time]&lt;/li&gt;
+&lt;li&gt;transformed AST will then get compiled into artifact that is invoked at runtime&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;if you’re interested to know more about quasiquote, &lt;a href=&quot;https://github.com/scalameta/scalameta/blob/master/notes/quasiquotes.md&quot;&gt;here&lt;/a&gt; is the reference for all quasiquote syntax&lt;/p&gt;
+&lt;p&gt;Now let’s inspect the implementation of AST transformation logic, ie. &lt;code class=&quot;language-text&quot;&gt;CacheMacroImpl.expand(tpr, backendParam, defn)&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;scala&quot;&gt;&lt;pre class=&quot;language-scala&quot;&gt;&lt;code class=&quot;language-scala&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;object&lt;/span&gt; CacheMacroImpl &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token comment&quot;&gt;/**
+    *
+    * @param fnTypeParams - Type params of annotation instance, remember our cache macro is generic `class cache[K, V]`,
+                            this will capture Seq(K, V)
+    * @param cacheExpr    - Argument pass to `cache` macro, should be type of `CacheBackEnd[K, V]`
+    * @param annotatedDef - Methods that is annotated
+    */&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; expand&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;fnTypeParams&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Seq&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;Type&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; cacheExpr&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Term&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Arg&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; annotatedDef&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Defn&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Def&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Term &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; cache &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; Term&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Name&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;cacheExpr&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;syntax&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;     &lt;span class=&quot;token comment&quot;&gt;// convert Term.Arg to Term.Name&lt;/span&gt;
+
+    annotatedDef &lt;span class=&quot;token keyword&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token comment&quot;&gt;// Another Quasiquote pattern match&lt;/span&gt;
+      &lt;span class=&quot;token comment&quot;&gt;// - `..$_`                   match any modifier&lt;/span&gt;
+      &lt;span class=&quot;token comment&quot;&gt;// - `def`                    match only method&lt;/span&gt;
+      &lt;span class=&quot;token comment&quot;&gt;// - `$methodName`            bind method name to $methodName&lt;/span&gt;
+      &lt;span class=&quot;token comment&quot;&gt;// - `[..$tps]`               match some type params of method and bind to $tps&lt;/span&gt;
+      &lt;span class=&quot;token comment&quot;&gt;// - `(..$nonCurriedParams)`  match non-curried argument list and binf to $nonCurriedParams&lt;/span&gt;
+      &lt;span class=&quot;token comment&quot;&gt;// - `$rtType`                bind return type to $rtType&lt;/span&gt;
+      &lt;span class=&quot;token comment&quot;&gt;// - `$expr`                  bind method&apos;s body to $expr&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;case&lt;/span&gt; q&lt;span class=&quot;token string&quot;&gt;&quot;..$_ def $methodName[..$tps](..$nonCurriedParams): $rtType = $expr&quot;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;=&gt;&lt;/span&gt;
+
+        &lt;span class=&quot;token comment&quot;&gt;// here is the trick to handle different arg size&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;nonCurriedParams&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;size &lt;span class=&quot;token operator&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+          &lt;span class=&quot;token comment&quot;&gt;// if only 1 arg, use the arg as key of cache&lt;/span&gt;
+          &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; paramAsArg &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; Term&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Name&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;nonCurriedParams&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;head&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;name&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;value&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+          q&lt;span class=&quot;token string&quot;&gt;&quot;&quot;&quot;
+            // here we are generating code that call the CacheBackend
+            val result: ${rtType} = $cache.get($paramAsArg) match {
+              case Some(v) =&gt; v
+              case None =&gt;
+                val value = ${expr}
+                $cache.put($paramAsArg, value)
+                value
+            }
+            result
+           &quot;&quot;&quot;&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; paramAsArg &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; nonCurriedParams&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;map&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;p &lt;span class=&quot;token keyword&quot;&gt;=&gt;&lt;/span&gt; Term&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Name&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;p&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;name&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;value&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+          q&lt;span class=&quot;token string&quot;&gt;&quot;&quot;&quot;
+
+            // if there are multiple arg, convert them in tuple, as use the tuple as key
+            val result: ${rtType} = $cache.get((..$paramAsArg)) match {
+              case Some(v) =&gt; v
+              case None =&gt;
+                val value = ${expr}
+                $cache.put((..$paramAsArg), value)
+                value
+            }
+            result
+           &quot;&quot;&quot;&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;case&lt;/span&gt; other &lt;span class=&quot;token keyword&quot;&gt;=&gt;&lt;/span&gt; abort&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;s&lt;span class=&quot;token string&quot;&gt;&quot;Expected non-curried method, got $other&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;I hope the implementation is not too intimidating, it does the following&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Check if the annotation methods is allowed or not (curried method is not allowed)&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Check the number of arguments&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;If 1, use it as is&lt;/li&gt;
+&lt;li&gt;If multiple, convert them into a tuple, and use the tuple as key of cache&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Try to get data from cache using &lt;code class=&quot;language-text&quot;&gt;cache.get(key)&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;If cache hit, return the cached value&lt;/li&gt;
+&lt;li&gt;If cache miss, evaluate the original annotated method, cache the result using &lt;code class=&quot;language-text&quot;&gt;cache.put(k, v)&lt;/code&gt;, and return the result&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;Analysis&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Pros&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;it supports different cache storage, eg. you could implement a Cache Backend that support TTL&lt;/li&gt;
+&lt;li&gt;it has almost zero syntatic overhead on caller&lt;/li&gt;
+&lt;li&gt;able to work on methods of different arguments&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Cons&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;It is more complicated to implement&lt;/li&gt;
+&lt;li&gt;The implementation is harder to debug&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;Here we end this tutorial, as we shown how could you create a generic, parameterize macro using scalameta.
+The code is availble &lt;a href=&quot;https://github.com/buaya91/scala-cache&quot;&gt;here&lt;/a&gt;
+As an exercise for readers, you can try to improve the cache so that it support async get and put.&lt;/p&gt;
+&lt;p&gt;Note: I am not claiming &lt;code class=&quot;language-text&quot;&gt;cache&lt;/code&gt; annotation is a good use-case of macro, ultimately it depends on your team and problem on hand. Nonetheless, I believe everyone should learn a bit of it to enhance your skills, and also to have better understanding on how compiler view your code.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[How multiplayer game sync their state? (Part 2)]]></title><description><![CDATA[Recap In  part 1 of the series , we discussed the following: Challenges faced in multiplayer game How to solve unresponsive UI by client…]]></description><link>https://gatsby-starter-blog-demo.netlify.com//multiplayer-game2/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com//multiplayer-game2/</guid><pubDate>Mon, 01 May 2017 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;&lt;span style=&quot;text-decoration: underline;&quot;&gt;Recap&lt;/span&gt;&lt;/h2&gt;
+&lt;p&gt;In &lt;a href=&quot;./multiplayer-game1&quot;&gt;part 1 of the series&lt;/a&gt;, we discussed the following:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Challenges faced in multiplayer game&lt;/li&gt;
+&lt;li&gt;How to solve unresponsive UI by client predictions&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I did however gloss over essential server implementation details, which
+we will focus on in this article.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Disclaimer: I am not a professional game developer, most of
+the knowledge shared is based on what I read and my experience of
+small hobby projects. The main goal of this article is to provide
+an easy to understand introduction for networking in a multiplayer 
+game.&lt;/strong&gt;&lt;/p&gt;
+&lt;h2&gt;&lt;span style=&quot;text-decoration: underline;&quot;&gt;What’s the role of server?&lt;/span&gt;&lt;/h2&gt;
+&lt;p&gt;Let’s start by defining what a server should do, typically a server should serve as&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;a) Connection point for players&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;In a multiplayer game, players need to access a common endpoint
+to reach each other, this is one of the roles of a server
+program, even in the P2P communication model, there will be a
+connection point for players to exchange their network
+information before a P2P connection can be established.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;b) Processing unit&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;In many cases, the server runs the game simulation code, process all
+inputs from player and updates the game state. Note that this is not
+always the case, some modern games offload lots of processing to the
+client side. In this article we will assume it&amp;#39;s the server&amp;#39;s
+responsibility to process the game, ie. Make the game tick.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;c) Single source of truth on game state&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;In many multiplayer games, the server program also has authority on 
+game state, the main reason is to prevent cheating, and it&amp;#39;s also
+easier to reason about when there&amp;#39;s is a single point to get the
+correct game state.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;&lt;span style=&quot;text-decoration: underline;&quot;&gt;Naive Server Implementation&lt;/span&gt;&lt;/h2&gt;
+&lt;p&gt;Let’s start to implement the server in the most straightforward fashion,
+then improve from there.&lt;/p&gt;
+&lt;p&gt;The core of the game server is a loop that keeps updating the GameState
+using a player’s input, commonly know as a TICK, the function signature
+is as follows:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;span style=&quot;color: #ff6600;&quot;&gt;(STATE&lt;sub&gt;n&lt;/sub&gt; , INPUT&lt;sub&gt;n&lt;/sub&gt;) =&gt; STATE&lt;sub&gt;n+1&lt;/sub&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;A simplified server code snippet would looks like this&lt;/p&gt;
+&lt;h3&gt;&lt;span style=&quot;text-decoration: underline;&quot;&gt;Discussion&lt;/span&gt;&lt;/h3&gt;
+&lt;p&gt;I hope the code snippets look intuitive and straightforward, the server simply take all inputs from the buffer and applies them in the next &lt;code class=&quot;language-text&quot;&gt;TICK&lt;/code&gt; function to get new GameState. Let’s call this approach &lt;code class=&quot;language-text&quot;&gt;Greedy Game Loop&lt;/code&gt;, as it tries to process things as fast as it could. It is all good, until we think about our lovely universe where sunlight takes 8 minutes to  reach the earth. &lt;/p&gt;
+&lt;p&gt;Latency strikes again!&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://cdn2.hubspot.net/hubfs/323094/qingwei/speed_of_light_meme.jpg&quot; title=&quot;speed_of_light_meme.jpg&quot;&gt;&lt;/p&gt;
+&lt;p&gt;The fact that the server processes all input from buffer in every &lt;code class=&quot;language-text&quot;&gt;TICK&lt;/code&gt;,
+means the GameState will depends on network latency. Diagram
+below illustrates why this is a problem&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://github.com/buaya91/image-storage/blob/master/multiplayer-game-networking/server-side-latency-issue-single.png?raw=true&quot;&gt;&lt;/p&gt;
+&lt;p&gt;The image shows 2 clients sending inputs to server, we observe 2
+interesting facts.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Requests took different time from different client to server, 
+&lt;strong&gt;1&lt;/strong&gt; unit of time from &lt;span style=&quot;background-color: #fab9d9;&quot;&gt;Client A&lt;/span&gt; to &lt;span style=&quot;background-color: #ccffcc;&quot;&gt;Server&lt;/span&gt;,  &lt;strong&gt;1.5&lt;/strong&gt; unit of time from &lt;span style=&quot;background-color: #ccffff;&quot;&gt;Client B&lt;/span&gt; to &lt;span style=&quot;background-color: #ccffcc;&quot;&gt;Server&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;Requests took different time from same client to server,
+1st request took &lt;strong&gt;1&lt;/strong&gt; unit of time, 2nd request took &lt;strong&gt;2&lt;/strong&gt; unit of time.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;In short, latency is inconsistent, even on the same connection.&lt;/p&gt;
+&lt;p&gt;Inconsistent latency combined with &lt;strong&gt;&lt;code class=&quot;language-text&quot;&gt;Greedy Game Loop&lt;/code&gt;&lt;/strong&gt; gives several problems, let look at these further.&lt;/p&gt;
+&lt;table style=&quot;border-color: #000000; background-color: #ffffff;&quot; border=&quot;3&quot; cellpadding=&quot;5&quot;&gt;
+    &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;td&gt;
+                &lt;h4 style=&quot;padding-left: 30px;&quot;&gt;Client Side Prediction will&amp;nbsp;not work&lt;/h4&gt;
+            &lt;/td&gt;
+            &lt;td&gt;
+                &lt;p style=&quot;text-align: left;&quot;&gt;
+                    &lt;span style=&quot;font-size: 13px;&quot;&gt;
+                    If&amp;nbsp;we cannot predict when the&amp;nbsp;server would
+                    receive input (due to latency), we can&apos;t make any
+                    predictions with high accuracy. (Forgot how Client
+                    Side Prediction works? read&amp;nbsp;
+                    &lt;a href=&quot;http://www.cakesolutions.net/teamblogs/how-does-multiplayer-game-sync-their-state-part-1#client-side-prediction&quot;&gt;here&lt;/a&gt;)
+                    &lt;/span&gt;
+                &lt;/p&gt;
+            &lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;
+                &lt;h4 style=&quot;padding-left: 30px;&quot;&gt;Low latency players&amp;nbsp;get advantages&lt;/h4&gt;
+            &lt;/td&gt;
+            &lt;td style=&quot;width: 642px;&quot;&gt;
+                &lt;span style=&quot;font-size: 13px;&quot;&gt;
+                If input takes a shorter time to reach server, it will
+                be processed sooner, creating unfair advantage for
+                players with fast networks. eg. Two players
+                shoot&amp;nbsp;each other at the same time,
+                they are supposed to kill each other at the same time,
+                but Player B has a lower latency thus killed Player A
+                before Player A&apos;s&amp;nbsp;command is processed.
+                &lt;/span&gt;
+            &lt;/td&gt;
+         &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;There is a simple solution to mitigate inconsistent latency,
+&lt;a href=&quot;./multiplayer-game1#lockstep&quot;&gt;Lockstep State Update&lt;/a&gt; that we discussed in the previous article. The idea is that server does not proceed until it received input from all players, it has 2 benefits:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;it does not require client side prediction&lt;/li&gt;
+&lt;li&gt;all players will appear to have the same latency as the slowest
+player, removing the advantage we mentioned&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;However, it does not work for fast-paced action games as the
+responsiveness is low. (More details can be found on previous article,
+thus I will not repeat here.)&lt;/p&gt;
+&lt;p&gt;Next section, we will talk about how to make the server side work for
+fast paced games.&lt;/p&gt;
+&lt;h2&gt;&lt;span style=&quot;text-decoration: underline;&quot;&gt;Server Reconcilation&lt;/span&gt;&lt;/h2&gt;
+&lt;p&gt;To solve the problem of inaccurate client side predictions, 
+we need to make the client-server interaction more predictable 
+from the client point of view. When a Player presses a key on client
+side, the client program needs to know when this input would being
+processed on server side.&lt;/p&gt;
+&lt;p&gt;One possible way is to &lt;strong&gt;let the client suggest when the input should
+be applied&lt;/strong&gt;, this way, client side would be able to predict it
+reliably. The term &lt;code class=&quot;language-text&quot;&gt;suggest&lt;/code&gt; is used as server might reject the
+suggestion if it’s invalid, for example trying to cast a magic when 
+your magic power is empty.&lt;/p&gt;
+&lt;p&gt;The input should be applied shortly after user input, ie.
+&lt;span style=&quot;color: #993366;&quot;&gt;&lt;strong&gt;T&lt;sub&gt;input&lt;/sub&gt; + X&lt;/strong&gt;&lt;/span&gt;,
+where X is the delay. The exact value depends on game, normally less
+than 100ms to be responsive. Note X can also be zero, in this case
+it should happen immediately after user provides input.&lt;/p&gt;
+&lt;p&gt;Let’s say we choose X = 30ms, which translates into roughly 1 frame
+for 30fps (frame per second), and it takes 150ms for input to travel
+to server, there’s a good chance when input reaches the server,
+the target frame for input had passed.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://github.com/buaya91/image-storage/blob/master/multiplayer-game-networking/server-side-independent-latency.png?raw=true&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Looking at the diagram, User A pressed a key at &lt;strong&gt;T&lt;/strong&gt;, which supposed
+to be processed at &lt;strong&gt;T + 30ms&lt;/strong&gt;, but the input is received by server
+at &lt;strong&gt;T + 150ms&lt;/strong&gt;, due to latency, which already passed &lt;strong&gt;T + 30ms&lt;/strong&gt;.
+This is the problem we are going to solve in this section&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;How does server apply input that should happen in the past?&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3&gt;&lt;span style=&quot;text-decoration: underline;&quot;&gt;The Concept&lt;/span&gt;&lt;/h3&gt;
+&lt;p&gt;You might have recalled client side prediction has a similar issue of
+incorrect predictions due to lacking information of opponents, and
+the incorrect predictions will later be corrected by state updates
+from server using &lt;strong&gt;&lt;a href=&quot;./multiplayer-game1#reconcilation&quot;&gt;Reconcilation&lt;/a&gt;&lt;/strong&gt;.
+The same technique can be used here, the only difference is that
+we are correcting the GameState on server using user input from clients.&lt;/p&gt;
+&lt;p&gt;All user input needs to be tagged with a timestamp, this timestamp will then be used to tell the server when to process this input.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://github.com/buaya91/image-storage/blob/master/multiplayer-game-networking/server-side-reconcilation1.png?raw=true&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;sub&gt;Note: On the first dotted line, it’s &lt;span style=&quot;color: #000000;&quot;&gt;&lt;strong&gt;Time X&lt;/strong&gt;&lt;/span&gt; on Client side, but &lt;span style=&quot;color: #000000;&quot;&gt;&lt;strong&gt;Time Y&lt;/strong&gt;&lt;/span&gt; on Server side, this is an interesting nature of multiplayer game (and many other distributed system), as client and server &lt;g class=&quot;gr_ gr_201 gr-alert gr_gramm gr_inline_cards gr_run_anim Grammar multiReplace&quot; id=&quot;201&quot; data-gr-id=&quot;201&quot;&gt;runs&lt;/g&gt; independently, the time of client and server typically will be different,  our algorithm will handle the difference.&lt;/sub&gt;&lt;/p&gt;
+&lt;p&gt;Diagram above shows interaction between 1 Client and the Server,&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Client sends an Input with timestamp telling server this input of
+Client A should happen on &lt;span style=&quot;color: #ff0000;&quot;&gt;Time X&lt;/span&gt;. &lt;/li&gt;
+&lt;li&gt;Server received the request on &lt;span style=&quot;color: #008000;&quot;&gt;Time Y&lt;/span&gt;,
+let’s assume Time X is older than Time Y for the sake of discussion.
+When developing our algorithm, we should not
+assume &lt;span style=&quot;color: #008000;&quot;&gt;Time Y&lt;/span&gt; is bigger or less
+than &lt;span style=&quot;color: #ff0000;&quot;&gt;Time X&lt;span style=&quot;color: #000000;&quot;&gt;,
+this will give us more flexibility.&lt;/span&gt;&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span style=&quot;color: #ff0000;&quot;&gt;&lt;span style=&quot;color: #000000;&quot;&gt;
+The &lt;span style=&quot;color: #ff0000;&quot;&gt;&lt;strong&gt;RED BOX&lt;/strong&gt;&lt;/span&gt; is where
+reconcilation happens, the server needs to apply the Input X to the
+latest game state so that it appears that input X happens
+on &lt;span style=&quot;color: #ff0000;&quot;&gt;Time X&lt;/span&gt;.&lt;/li&gt;
+&lt;li&gt;GameState from server also includes timestamp, which is required 
+for both server side and client side reconcilation.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4&gt;Details of Reconcilation (&lt;strong&gt;&lt;span style=&quot;color: #ff0000;&quot;&gt;the RED BOX&lt;/span&gt;&lt;/strong&gt;)&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Server needs to maintain&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;span style=&quot;color: #000000;&quot;&gt;GameStateHistory        &lt;/span&gt;&lt;/strong&gt;&lt;span style=&quot;color: #000000;&quot;&gt;- history of GameState within a time frame &lt;strong&gt;P&lt;/strong&gt;, eg. all GameState since a second ago&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ProcessedUserInput&lt;/strong&gt; - history of UserInput processed within a time frame &lt;strong&gt;P&lt;/strong&gt;, ie. same value as time frame of GameStateHistory&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;UnprocessedUserInput&lt;/strong&gt; - UserInput received, but not processed yet, also within time frame &lt;strong&gt;P&lt;/strong&gt;
+&lt;img src=&quot;https://github.com/buaya91/image-storage/blob/master/multiplayer-game-networking/server-buffer0.png?raw=true&quot;&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;When server received an input from user, it should be inserted into the &lt;strong&gt;UnprocessedUserInput&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://github.com/buaya91/image-storage/blob/master/multiplayer-game-networking/server-buffer1.png?raw=true&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Next, when server ticks, &lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Check if there is any user input in the &lt;strong&gt;UnprocessedUserInput&lt;/strong&gt; which is older than the current frame&lt;/li&gt;
+&lt;li&gt;If not, you are good, simply run the game logic with latest GameState and corresponding Inputs (if any), and broadcast to clients.&lt;/li&gt;
+&lt;li&gt;If yes, it means some of the game states generated previously are wrong due to missing information, we need to correct it&lt;/li&gt;
+&lt;li&gt;First we need to find the oldest unprocessed user input, let say it is on Time N, (Tips: this operation is fast if the **UnprocessedUserInput **is sorted).&lt;/li&gt;
+&lt;li&gt;Then we need to obtain the corresponding GameState on Time N from &lt;strong&gt;GameStateHistory&lt;/strong&gt;, and the processed user input on Time N from &lt;strong&gt;ProcessedUserInput&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Using these 3 pieces of data, we can create a new GameState which is more accurate.
+&lt;img src=&quot;https://github.com/buaya91/image-storage/blob/master/multiplayer-game-networking/server-buffer2.png?raw=true&quot;&gt;&lt;/li&gt;
+&lt;li&gt;Then move the Unprocessed Input N to ProcessedUserInput, so that we can use it for reconcilation in the future.&lt;/li&gt;
+&lt;li&gt;Update the GameState N in &lt;strong&gt;GameStateHistory&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Repeat step 4 to 7, for &lt;code class=&quot;language-text&quot;&gt;N+1, N+2 ...&lt;/code&gt;, until we get latest GameState.&lt;/li&gt;
+&lt;li&gt;Server sends out the latest frame to all players. &lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;&lt;span style=&quot;text-decoration: underline;&quot;&gt;Discussion&lt;/span&gt;&lt;/h3&gt;
+&lt;p&gt;Server side reconcilation suffers similar problems as client side
+reconcilation, when we reconcile, it means we did something wrong,
+and we are correcting by changing history. This means we cannot apply
+irreversible outcomes, i.e, killing a players, such irreversible
+outcomes will only be applied when it goes out of the
+&lt;strong&gt;GameStateHistory&lt;/strong&gt;, ie. when it cannot be rewriten anymore.&lt;/p&gt;
+&lt;p&gt;In addition, the incorrect GameState sometime causes awful UI jump.
+Diagram below illustrate how it happens&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://github.com/buaya91/image-storage/blob/master/multiplayer-game-networking/server-error0.png?raw=true&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Entity starts at top left corner, it is moving toward
+right hand side, 5 ticks later, it shifted towards right, but
+then server received the user input saying that the entity changed
+direction on Tick N, so the server reconciles the game state, and
+now suddenly the entity &lt;strong&gt;jumps&lt;/strong&gt; to the bottom left on the canvas.&lt;/p&gt;
+&lt;p&gt;I might be exaggerating the effect, sometimes entity does not move
+that much, thus the jump would less obvious, but it is still noticeable
+in many cases. We can control the jump by changing the size
+of &lt;strong&gt;GameStateHistory&lt;/strong&gt;, &lt;strong&gt;UnprocessedUserInput&lt;/strong&gt; and &lt;strong&gt;ProcessedUserInput&lt;/strong&gt;,
+the smaller the buffer size, the less jump there would be, because
+we would be less tolerant on input that arrives late, eg. If Input
+that is late for more than 100ms is ignored, player with ping &gt; 200ms
+wont be able to play the game.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;We can trade &lt;strong&gt;network latency tolerance&lt;/strong&gt; for more &lt;strong&gt;accurate game state update&lt;/strong&gt;,
+or vice versa.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;One popular technique to overcome the problem of inaccurate Game State 
+is &lt;strong&gt;Entity Interpolation&lt;/strong&gt;, the idea is to smoothen the jump by
+spreading it out within a short amount of time.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://github.com/buaya91/image-storage/blob/master/multiplayer-game-networking/server-error1.png?raw=true&quot;&gt;&lt;/p&gt;
+&lt;p&gt;I will not include implementation details of &lt;strong&gt;Entity Interpolation&lt;/strong&gt;
+in this article, however some references will be provided at the bottom of article.&lt;/p&gt;
+&lt;h2&gt;&lt;span style=&quot;text-decoration: underline;&quot;&gt;Wrapping Up&lt;/span&gt;&lt;/h2&gt;
+&lt;p&gt;We have talked about how both client and server might work in a multiplayer game.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://github.com/buaya91/image-storage/blob/master/multiplayer-game-networking/wrapup.png?raw=true&quot;&gt;In general, a multiplayer game has 3 loosely coupled loops, &lt;strong&gt;Server Game Loop&lt;/strong&gt;, &lt;strong&gt;&lt;g class=&quot;gr_ gr_149 gr-alert gr_spell gr_inline_cards gr_run_anim ContextualSpelling ins-del multiReplace&quot; id=&quot;149&quot; data-gr-id=&quot;149&quot;&gt;Client side&lt;/g&gt; prediction Loop&lt;/strong&gt;, and &lt;strong&gt;&lt;g class=&quot;gr_ gr_150 gr-alert gr_spell gr_inline_cards gr_run_anim ContextualSpelling ins-del multiReplace&quot; id=&quot;150&quot; data-gr-id=&quot;150&quot;&gt;Client side&lt;/g&gt; UI Rendering Loop&lt;/strong&gt;. By having some sort of buffer in between them, their execution can be decoupled, giving us &lt;g class=&quot;gr_ gr_205 gr-alert gr_gramm gr_inline_cards gr_run_anim Grammar multiReplace&quot; id=&quot;205&quot; data-gr-id=&quot;205&quot;&gt;flexibility&lt;/g&gt; to create better gaming experience.&lt;/p&gt;
+&lt;h2&gt;&lt;span style=&quot;text-decoration: underline;&quot;&gt;Conclusion&lt;/span&gt;&lt;/h2&gt;
+&lt;p&gt;Here ends my article on Multiplayer games, I learned much of this
+knowledge from experts in this field, building a 
+&lt;a href=&quot;https://github.com/buaya91/scalajs-snake&quot;&gt;simple multiplayer game&lt;/a&gt; also helps a lot.
+I’ve only show one way to implement a multiplayer server,
+there are more other ways, depending on what kind of game you’re
+building, I encourage you to explore some of those ideas by building a simple game.&lt;/p&gt;
+&lt;p&gt;Thanks for reading, happy hacking !&lt;/p&gt;
+&lt;h2&gt;&lt;span style=&quot;text-decoration: underline;&quot;&gt;&lt;strong&gt;References and Further Reading&lt;/strong&gt;&lt;/span&gt;&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;[Entity Interpolation] - &lt;a href=&quot;http://www.gabrielgambetta.com/fpm3.html&quot;&gt;http://www.gabrielgambetta.com/fpm3.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://gafferongames.com/networked-physics/snapshots-and-interpolation/&quot;&gt;&lt;span&gt;[Entity Interpolation] - &lt;/span&gt;http://gafferongames.com/networked-physics/snapshots-and-interpolation/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;[Lag Compensation] - &lt;a href=&quot;https://developer.valvesoftware.com/wiki/Source_Multiplayer_Networking#Lag_compensation&quot;&gt;https://developer.valvesoftware.com/wiki/Source&lt;em&gt;Multiplayer&lt;/em&gt;Networking#Lag_compensation&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[Fantastic meetings and where to find them]]></title><description><![CDATA[Anecdotally most people in the software industry hate meetings; a meeting is a soul-sucking dementor. Jokes aside, I think it’s fair to say…]]></description><link>https://gatsby-starter-blog-demo.netlify.com//meetings/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com//meetings/</guid><pubDate>Sat, 01 Apr 2017 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Anecdotally most people in the software industry hate meetings; a meeting is a soul-sucking dementor. Jokes aside, I think it’s fair to say that people feel meetings are taking too much time and the process is often painful.&lt;/p&gt;
+&lt;p&gt;In this post, I’ll try to provide a few rules of thumb that I believe can make meetings less painful and more efficient.&lt;/p&gt;
+&lt;h2&gt;Rule 1: Always reiterate your goal before start&lt;/h2&gt;
+&lt;p&gt;How many times do you attend a meeting without a goal in mind?&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Me: Dozens of them&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The &lt;code class=&quot;language-text&quot;&gt;why&lt;/code&gt; is the first question you should answer before stepping into a meeting room. If you can’t tell why are we are having a meeting, there is something missing in your communication process. You should fix it ASAP.&lt;/p&gt;
+&lt;p&gt;In many cases, only a few people know the goal clearly. If we conduct a meeting without communicating the goal to the rest of team, one or more of the following might happen:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;People realize they don’t know the goal and start asking questions to figure it out&lt;/li&gt;
+&lt;li&gt;The rest of the team thought they knew the goal well enough and are using this incorrect understanding to make decisions&lt;/li&gt;
+&lt;li&gt;People who feel the goal isn’t clear and then tend to follow an other’s opinion&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;In first case, you lost time but still can reach the goal eventually. For #2 and #3 it gets worse:
+you will get false sense of validation or invalidation on a decision as people agree (or disagree) without enough information.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;A quick remedy for this problem is to simply reiterate the goal in a straightforward manner before meeting start.&lt;/strong&gt; This will likely be a responsibility of meeting initiator. If you call for a meeting, you should make it clear why to have one. If you are attending a meeting without a goal, ask for one to be added to the invite.&lt;/p&gt;
+&lt;p&gt;This extra step only cost you a few minutes but the benefit is huge. It’s important to discover what people don’t know as soon as possible (like catching bug in software).&lt;/p&gt;
+&lt;h2&gt;Rule 2: Limit the level of details in discussion&lt;/h2&gt;
+&lt;p&gt;A common theme in meetings is &lt;code class=&quot;language-text&quot;&gt;discussion&lt;/code&gt;. Software development is largely about making decisions. Quite often individuals can make decisions on things on their own but sometimes a decision happens to have bigger implications. This warrants a meeting among the team or between several teams.&lt;/p&gt;
+&lt;p&gt;It is important to conduct discussion in an efficient way. Unsurprisingly, this is not the case for many organizations.&lt;/p&gt;
+&lt;p&gt;From my admittedly limited experience, one big problem in meeting is that people tends to open up related questions before a discussion point is concluded.&lt;/p&gt;
+&lt;p&gt;For example, when we are trying to reach agreement on domain model, an engineer might unconciously start asking questions about implementation, eg. how does a domain model map into relational model of our favorite RDBMS.&lt;/p&gt;
+&lt;p&gt;Sometimes, derail is a necessary evil. Some high level decisions depend on some very specific details of low level components, for example when deciding what latency a service should guarantee. We must consider technical feasibility to make informed decision.&lt;/p&gt;
+&lt;p&gt;However, in general, it is completely avoidable.&lt;/p&gt;
+&lt;p&gt;To avoid this problem, we have to &lt;strong&gt;scope the level of detail during discussion&lt;/strong&gt;. There are several techniques can be used:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Assign someone to guide the direction of discussion and try to resolve discussion point by point&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Be explicit throughout the process (like a sport commentator) by&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Repeating the discussion point (preferably in question form) before start&lt;/li&gt;
+&lt;li&gt;Note sub-conclusion points whenever an agreement/disagreement is reached&lt;/li&gt;
+&lt;li&gt;Note a conclusion to close the discussion before proceeding to next point&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Derailment is only allowed if justification is provided, e.g. we need to discuss project budget first as it affects our decision of team resource distribution.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; The &lt;code class=&quot;language-text&quot;&gt;sub-conclusion&lt;/code&gt; can be really simple. Just reiterate on every significant progress in the meeting, eg. “It seems like no one thinks option B is going to work, so we are left with option A and C. Let’s focus on A first to see if it fits our usecase”&lt;/p&gt;
+&lt;p&gt;Despite it’s simplicity, you’ll be surprised how effective point #2 is when put into practice. By explicitly stating the progress of meeting, you’ll be able to grab people’s attention and give the team a sense of progress by having fast feedback loop (We all love feedback loop!)&lt;/p&gt;
+&lt;h2&gt;Rule 3: Always have an agenda&lt;/h2&gt;
+&lt;p&gt;We’ve talked about having clear goals and limit the discussion. It’s natural to think about meeting agendas, I believe having a meeting agenda facilitates earlier points we’ve discussed.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;An agenda should be derived from the goal(s) of the meeting and be arranged in a logical way that eventually leads to the goal&lt;/strong&gt; (this sounds recursive, bear with me).&lt;/p&gt;
+&lt;p&gt;For example, if we are trying to decide what protocol to be used for multiple microservices, the agenda might look like this&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;* Problem to be solved including requirements
+* Proposals
+* Benefit cost analysis of each proposal
+* Discussion and decisions&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;By trying to come out with an agenda, you will discover more details before having a meeting. Items like analysis and proposals should really be prepared before the meeting; people only care about the result of the analysis, not the progress. It is easier for people to prepare before meeting with a clear agenda.&lt;/p&gt;
+&lt;p&gt;The agenda definition can be driven by meeting initiator and collaboration with the team, allowing the rest of the team to add missing points in advance.&lt;/p&gt;
+&lt;p&gt;Things like this may sounds obvious but still it was frequently neglected and causes unnecessary confusion.&lt;/p&gt;
+&lt;h2&gt;Rule 4: Choose the right people to be in the meeting&lt;/h2&gt;
+&lt;p&gt;Another common problem of meetings is that it involves the wrong people. Sometimes we include more people than necessary. Sometimes we leave out important people that can provide crucial information. Sometimes both.&lt;/p&gt;
+&lt;p&gt;People are sometimes lazy to figure out who to invite and invite the whole team. Such a strategy might work but it is not very efficient. People specialize for a reason and letting people focus on their expertise is more productive.&lt;/p&gt;
+&lt;p&gt;On the other hand, it’s also easy to leave out important people, especially when they are in different team, and we need to make a decision involving cross team effort.&lt;/p&gt;
+&lt;p&gt;Choosing the correct people is only possible if you have a clear understanding on what to discuss and more importantly what NOT to discuss (see #1 and #2).&lt;/p&gt;
+&lt;p&gt;This rule, when executed properly, will save your organization substantial amount of time.&lt;/p&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;To summarize, a fantastic meeting usually consists of&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Clear goal&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Well defined agenda&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Close to zero derailment&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;People with the right information&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I hope you find this post useful. Feedback is welcome. Feel free to drop me a message =)&lt;/p&gt;</content:encoded></item><item><title><![CDATA[How multiplayer game sync their state? (Part 1)]]></title><description><![CDATA[The main problem in multiplayer game In multiplayer game, one of the most complex issue is to keep all player’s state in sync with server…]]></description><link>https://gatsby-starter-blog-demo.netlify.com//multiplayer-game1/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com//multiplayer-game1/</guid><pubDate>Wed, 01 Mar 2017 00:00:00 GMT</pubDate><content:encoded>&lt;h3&gt;The main problem in multiplayer game&lt;/h3&gt;
+&lt;p&gt;In multiplayer game, one of the most complex issue is to keep all player’s state in sync with server state.
+There are a few good articles around this topic on the internet. However, some details are missing here and there, which may be confusing for beginners in field of game programming, I hope I can clear things up in this article.&lt;/p&gt;
+&lt;p&gt;I’ll present a few techniques commonly used in this problem space.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Before&lt;/strong&gt; we jump into the problem, let’s have an overview on how multiplayer game generally works.&lt;/p&gt;
+&lt;p&gt;Typically, a game program needs to simulate&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;the changes in an environment with respect of time and players input&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Game is stateful program, it depends on time (be it real or logical time), for example, PACMAN is simulating an environment that ghosts will keep moving.&lt;/p&gt;
+&lt;p&gt;A multiplayer game is no exception, just that the complexity is higher due to interaction between multipler players.&lt;/p&gt;
+&lt;p&gt;Let’s use the classic Snake Game as an example, assume we use a server-client settings. The core game logic works like this&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Read user inputs which can be one of [←, ↑, →, ↓], to change the direction of snake.&lt;/li&gt;
+&lt;li&gt;Apply user input if any, which change the direction of snake.&lt;/li&gt;
+&lt;li&gt;Move snake by 1 unit space&lt;/li&gt;
+&lt;li&gt;Check if any snakes bump into enemy/wall/self, remove them from the game.&lt;/li&gt;
+&lt;li&gt;Repeat&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;This logic will be run at a fixed interval on server side, as below, each loop is a called a &lt;code class=&quot;language-text&quot;&gt;frame&lt;/code&gt; or a &lt;code class=&quot;language-text&quot;&gt;tick&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;scala&quot;&gt;&lt;pre class=&quot;language-scala&quot;&gt;&lt;code class=&quot;language-scala&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; main&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;Unit&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+   &lt;span class=&quot;token keyword&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token boolean&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token comment&quot;&gt;/**
+      * 1. Read user inputs which can be one of [←, ↑, →, ↓], to change the direction of snake.
+      * 2. Apply user input if any, which change the direction of snake.
+      * 3. Move snake by 1 unit space
+      * 4. Check if any snakes bump into enemy/wall/self, remove them from the game.
+      * 5. Broadcast the new game state to all clients
+      */&lt;/span&gt;
+      Thread&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;sleep&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;And the simplest client would just listen to server update and render every frame received to players.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;scala&quot;&gt;&lt;pre class=&quot;language-scala&quot;&gt;&lt;code class=&quot;language-scala&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; Client &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+   &lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; onServerUpdate&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;state&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; GameState&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      renderGameState&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;state&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;The problem&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;How do we sync the game world between server and different players in real time?&lt;/p&gt;
+&lt;h2&gt;Lockstep State update&lt;/h2&gt;
+&lt;h3&gt;Concept&lt;/h3&gt;
+&lt;p&gt;To make sure all client are in sync, the simplest way is to let client send update to server in a fixed interval,
+let’s say every 30ms. The update would contains user input, it can also represent &lt;code class=&quot;language-text&quot;&gt;no user input&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Once server gather input from &lt;strong&gt;all user&lt;/strong&gt;, it can then proceed with next tick using those inputs.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/buaya91/image-storage/master/multiplayer-game-networking/lockstep-single.png&quot; alt=&quot;img&quot;&gt;&lt;/p&gt;
+&lt;p&gt;The image above show how one client interact with server, I hope the problem is obivous, client will stay idle from &lt;strong&gt;T0&lt;/strong&gt; to &lt;strong&gt;T1&lt;/strong&gt;, waiting for server update to proceed. The latency can range from 50ms to 500ms, depending on network quality, and human will notice any delay over 100ms, so freezing the user interface for 200ms can be big problem for some games. This is not the only issue with lockstep approach.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/buaya91/image-storage/master/multiplayer-game-networking/lockstep-multi.png&quot; alt=&quot;img&quot;&gt;
+This image is slightly more complicated, showing multi-client interaction with server, you can see that client B have a slower network connection, thus although both A and B send input to server at &lt;strong&gt;T0&lt;/strong&gt;, update from B reach server at &lt;strong&gt;T2&lt;/strong&gt; instead of &lt;strong&gt;T1&lt;/strong&gt;, server only proceed once it receive all updates which is &lt;strong&gt;T2&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;This means&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;the latency of the game is now the latency of the most lagged player&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;we are punishing all players because one of them is lagging, eventually all players will leave your game …&lt;/p&gt;
+&lt;p&gt;Not to say there’s a possiblity that client B might be disconnected, thus will block the server until connection timeout.&lt;/p&gt;
+&lt;h3&gt;Discussion&lt;/h3&gt;
+&lt;p&gt;There are some problems including 2 of which we just mentioned :&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Client will not be responding until receive state update from server, horrible user experience.&lt;/li&gt;
+&lt;li&gt;Game responsiveness depends on the most lagged players, playing with a friend with DSL connection? Have Fun&lt;/li&gt;
+&lt;li&gt;The connection would be really chatty, clients need to send some useless heartbeat data regularly so that server can confirm it have got all information needed to step forward, which is not efficient.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;First of all, certain kind of games are immune to these problems, most &lt;code class=&quot;language-text&quot;&gt;Turn-based&lt;/code&gt; game actually use some variant of
+such model, as client are supposed to wait. For slow-paced game, small amount of delay is acceptable too, for example Farm Ville.&lt;/p&gt;
+&lt;p&gt;A great example is &lt;strong&gt;Chess&lt;/strong&gt;, where 2 players take their own turn, assuming each turn takes 10 secs&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;user are expect to wait each other for 10 secs, they can wait&lt;/li&gt;
+&lt;li&gt;2 players take turn alternatively, so lagged player does not affect other player&lt;/li&gt;
+&lt;li&gt;each turn takes on average 5 secs, 1 request every 5 secs is fine&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;But for fast-paced game, like all FPS, all of these problems make lockstep approach not suitable for them.
+We will see how we can solve these problem in the rest of articles.&lt;/p&gt;
+&lt;h2&gt;Client Predictions&lt;/h2&gt;
+&lt;p&gt;Let’s first solve the problem of user-responsiveness, game response after 500 millis after user press a key destroy
+the gaming experience. How to solve this problem?&lt;/p&gt;
+&lt;h3&gt;Concept&lt;/h3&gt;
+&lt;p&gt;Some of you might have already have the answer, instead of waiting on server update, client can actually emulate the game by running game logic locally (ie. on the client’s machine).&lt;/p&gt;
+&lt;p&gt;Let’s assume to produce game state at &lt;code class=&quot;language-text&quot;&gt;Tn&lt;/code&gt;, we need state at &lt;code class=&quot;language-text&quot;&gt;Tn-1&lt;/code&gt; and all user input at &lt;code class=&quot;language-text&quot;&gt;Tn-1&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/buaya91/image-storage/master/multiplayer-game-networking/clientprediction-single.png&quot; alt=&quot;img&quot;&gt;&lt;/p&gt;
+&lt;p&gt;The idea is simple, let’s have a fixed update rate, which is &lt;code class=&quot;language-text&quot;&gt;1 unit of time&lt;/code&gt; in this example, client send input to server at &lt;strong&gt;T0&lt;/strong&gt;, and emulate the game state at &lt;strong&gt;T1&lt;/strong&gt;, so client can then render the game without having to wait the state update from server, which only arrive at &lt;strong&gt;T3&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;This approach only works if&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;Game state update logic is deterministic, ie. no randomness, or in some way, referentially transparent, so that server and client produce the same game state given the same input.&lt;/li&gt;
+&lt;li&gt;Client have all information required to run game logic&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;1 is not always true, but we can try to make it as similar as possible, and ignore the small differences, ie. floating points computation of different platform, use the same seed for pseudo-random algorithm.&lt;/p&gt;
+&lt;p&gt;2 is also not true, for example&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/buaya91/image-storage/master/multiplayer-game-networking/clientprediction-multi.png&quot; alt=&quot;img&quot;&gt;&lt;/p&gt;
+&lt;p&gt;In the image above, Client A still try to emulate game state at &lt;strong&gt;T1&lt;/strong&gt; using the information it has from &lt;strong&gt;T0&lt;/strong&gt;, but Client B also submitted input at &lt;strong&gt;T0&lt;/strong&gt;, which Client A is not aware of, this means Client A’s prediction of &lt;strong&gt;T1&lt;/strong&gt; will be wrong. Luckily, since Client A still receive state of &lt;strong&gt;T1&lt;/strong&gt; from server, at &lt;strong&gt;T3&lt;/strong&gt;, client have the chance to correct it’s mistake.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Client side need to figure out if the previous emulation is correct, and how to resolve the conflicts.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The resolution of conflicts is normally called &lt;strong&gt;Reconcilation&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Implementation of &lt;strong&gt;Reconcilation&lt;/strong&gt; varies depending on use case, I’ll show a simple one, which we just throw away our prediction and replace it with the correct state from server.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Client need to maintain 2 buffers, one for predictions, one for user input, which can be used to compute predictions.
+Remember, &lt;strong&gt;State Tn&lt;/strong&gt; is computed using &lt;strong&gt;State Tn-1&lt;/strong&gt; and &lt;strong&gt;Input Tn-1&lt;/strong&gt;, it will be empty at first.
+&lt;img src=&quot;https://raw.githubusercontent.com/buaya91/image-storage/master/multiplayer-game-networking/clientprediction-initbuffer.png&quot; alt=&quot;img&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;When player press an arrow key, the input in stored in InputBuffer, and client will also produce predictions which is then used to render the view, the prediction is stored in PredictionBuffer.&lt;/p&gt;
+&lt;div&gt;
+&lt;img src=&quot;https://raw.githubusercontent.com/buaya91/image-storage/master/multiplayer-game-networking/clientprediction-buffer1.png&quot;&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/buaya91/image-storage/master/multiplayer-game-networking/clientprediction-buffer2.png&quot; alt=&quot;img&quot;&gt;&lt;/p&gt;
+&lt;ol start=&quot;3&quot;&gt;
+&lt;li&gt;
+&lt;p&gt;When server State0 is received, and does not match with the client Prediction0, we can replace Prediction0 with State0, and recompute Prediction1 using Input0 and State0.&lt;/p&gt;
+&lt;div&gt;
+&lt;img src=&quot;https://raw.githubusercontent.com/buaya91/image-storage/master/multiplayer-game-networking/clientprediction-reconciledbuffer.png&quot; style=&quot;display:block;&quot;&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;After reconcilation, we can safely removed State0 and Input0 from the buffer, as we can confirm we got it correct.
+&lt;img src=&quot;https://raw.githubusercontent.com/buaya91/image-storage/master/multiplayer-game-networking/clientprediction-droppedbuffer.png&quot; alt=&quot;img&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Note: this reconcilaton comes with a drawback, there might be glitches on view if server state and client prediction differ too much, for example if we predict enemy is moving south on &lt;strong&gt;T0&lt;/strong&gt;, but at &lt;strong&gt;T3&lt;/strong&gt; we realize it move towards north, and reconcile by simply using state from server, the enemy will bounce from towards north to reflect it’s correct position. There are ways to handle this problem, but it will not be in this article.&lt;/p&gt;
+&lt;h3&gt;Discussion&lt;/h3&gt;
+&lt;p&gt;Client prediction technique gives us a big benefit&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Client run on it’s own update rate, independent to server update rate, so that if server is having hiccups, it does not affect client side frame rate.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;It inevitably comes with some complexity :&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;We need to handle more state and logic on client side, (Prediction buffer, state buffer, prediction logic).&lt;/li&gt;
+&lt;li&gt;We need to decide how to handle conflict between prediction and real state from server.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;And it still leave us with some problem :&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;View glitches due to wrong predictions&lt;/li&gt;
+&lt;li&gt;Chatty connection&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;In this article, we went through 2 ways of approaching multiplayer game networking :&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Lockstep state update&lt;/li&gt;
+&lt;li&gt;Client prediction&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Each comes with it’s own set of trade off, so far we havent get a closer look on the server side, which will be covered in next article some time later.&lt;/p&gt;
+&lt;p&gt;Thanks for reading !&lt;/p&gt;</content:encoded></item></channel></rss>
