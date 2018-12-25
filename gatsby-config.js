@@ -2,8 +2,7 @@ module.exports = {
   siteMetadata: {
     title: 'All models are wrong',
     author: 'Qing Wei',
-    description: 'I write stuff so I don\'t have to remember',
-    siteUrl: 'https://gatsby-starter-blog-demo.netlify.com/',
+    description: 'I write stuff so I can forget.',
   },
   plugins: [
     {
@@ -40,7 +39,7 @@ module.exports = {
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
-        //trackingId: `ADD YOUR TRACKING ID HERE`,
+        trackingId: `UA-131331947-1`,
       },
     },
     `gatsby-plugin-feed`,
