@@ -3,6 +3,7 @@ module.exports = {
     title: 'All models are wrong',
     author: 'Qing Wei',
     description: 'I write stuff so I can forget.',
+    siteUrl: 'https://qingwei91.github.io',
   },
   plugins: [
     {
