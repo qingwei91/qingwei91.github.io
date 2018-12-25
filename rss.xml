@@ -1,5 +1,58 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[All models are wrong]]></title><description><![CDATA[I write stuff so I don't have to remember]]></description><link>https://gatsby-starter-blog-demo.netlify.com/</link><generator>RSS for Node</generator><lastBuildDate>Sun, 23 Dec 2018 18:55:08 GMT</lastBuildDate><item><title><![CDATA[Scalameta tutorial: Cache decorator]]></title><description><![CDATA[This is a tutorial to show how to use Scalameta to develop a  generic, parameterized annotation .
-To know how to setup a project to use…]]></description><link>https://gatsby-starter-blog-demo.netlify.com//scalameta-tut/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com//scalameta-tut/</guid><pubDate>Sat, 06 May 2017 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;This is a tutorial to show how to use Scalameta to develop a &lt;strong&gt;generic, parameterized annotation&lt;/strong&gt;.
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[All models are wrong]]></title><description><![CDATA[I write stuff so I can forget.]]></description><link>https://qingwei91.github.io</link><generator>RSS for Node</generator><lastBuildDate>Tue, 25 Dec 2018 17:09:10 GMT</lastBuildDate><item><title><![CDATA[My reflection for 2018]]></title><description><![CDATA[2018 Reflection What went well? More responsibility at work Getting more responsibility is stressful and fun at the same time, luckily my…]]></description><link>https://qingwei91.github.io/2018-reflection/</link><guid isPermaLink="false">https://qingwei91.github.io/2018-reflection/</guid><pubDate>Tue, 25 Dec 2018 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;2018 Reflection&lt;/h1&gt;
+&lt;h2&gt;What went well?&lt;/h2&gt;
+&lt;h3&gt;More responsibility at work&lt;/h3&gt;
+&lt;p&gt;Getting more responsibility is stressful and fun at the same time, luckily my team leads and project manager are good at helping me.&lt;/p&gt;
+&lt;p&gt;One of the main changes when leading is that my decision starts to impact a larger part of the project, for better or worse. This means that I need to be more cautious when making decision, and strike a better balance between ensuring safety and making progress.&lt;/p&gt;
+&lt;h3&gt;I learned a lot more about functional programming&lt;/h3&gt;
+&lt;p&gt;I am thankful to be in the same team with Olivier, which he taught us a lot about functional programming. In addition, our team leads have been open with advanced technique which allow us to learn things on our job.&lt;/p&gt;
+&lt;h4&gt;Recursion Schemes&lt;/h4&gt;
+&lt;p&gt;I’ve learn some basic of recursion schemes, and manage to apply it in an open source project &lt;a href=&quot;https://github.com/qingwei91/basil&quot;&gt;basil&lt;/a&gt;&lt;/p&gt;
+&lt;h4&gt;Tagless Final&lt;/h4&gt;
+&lt;p&gt;I am starting to appreciate interpreter pattern more. By separating definition and execution, one can gain a lot of power without paying huge refactoring cost.&lt;/p&gt;
+&lt;p&gt;Example: Execute a program with &lt;code class=&quot;language-text&quot;&gt;debounce&lt;/code&gt; Effect to prevent rate limit exception from a remote API&lt;/p&gt;
+&lt;h3&gt;Wrote an interesting library: &lt;a href=&quot;https://github.com/qingwei91/basil&quot;&gt;basil&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;I wrote this library out of curiosity, and learn a lot in the process, I’ve learn about &lt;code class=&quot;language-text&quot;&gt;higher kinded fix&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;FreeApplicative&lt;/code&gt; and a lot more.&lt;/p&gt;
+&lt;p&gt;It’s cool to (re)discover that I am most motivated when exploring new stuff, even if it’s not useful.&lt;/p&gt;
+&lt;h3&gt;Reboot my own blog: &lt;a href=&quot;https://qingwei91.github.io&quot;&gt;https://qingwei91.github.io&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;While my company blog undergone some changes which makes it harder to submit a blogpost, I decided to start my own blog again.&lt;/p&gt;
+&lt;p&gt;I didn’t write as many blog as I wanted, let’s hope I will do it more in the coming year.&lt;/p&gt;
+&lt;h3&gt;Formed a habit to gym&lt;/h3&gt;
+&lt;p&gt;I am very happy that I am going to gym more often, it’s started to form a habit. This &lt;a href=&quot;https://www.youtube.com/user/JDCav24/featured&quot;&gt;youtube channel&lt;/a&gt; is one of my favorite channel about working out, thanks Jeff !&lt;/p&gt;
+&lt;h3&gt;Enhanced my culinary skills&lt;/h3&gt;
+&lt;p&gt;I enjoy cooking and have been trying out different recipes, hurray !&lt;/p&gt;
+&lt;h2&gt;What went wrong?&lt;/h2&gt;
+&lt;h3&gt;Investment went deep down, I mean deep down&lt;/h3&gt;
+&lt;p&gt;I made a couple of big mistakes:&lt;/p&gt;
+&lt;p&gt;a) Invest (speculate ?) without knowing how to make valuation
+b) Not knowing to cut-loss and take profit
+c) Putting all pressure on my wife which is an amateur&lt;/p&gt;
+&lt;p&gt;these combined with uncertainty brought by trade war, and slow down of global economy means a bad year for our investment&lt;/p&gt;
+&lt;h3&gt;Mistakes in work due to carelessness&lt;/h3&gt;
+&lt;p&gt;I realized I get carried away rather easily, there’s a part of me that behaves like an enthusiastic dog that is eager to do whatever I am tasked to do :D&lt;/p&gt;
+&lt;p&gt;While being enthusiastic is not a bad thing, it certainly isn’t an excuse for recklessness, I need to be more mindful when making decision or taking actions.&lt;/p&gt;
+&lt;h3&gt;Fail to develop an arbitrage software I planned earlier of the year&lt;/h3&gt;
+&lt;p&gt;I wanted to build an arbitrage engine but didn’t finish it, couple of reasons:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;the project turns out to be quite difficult and messy due to external api changes&lt;/li&gt;
+&lt;li&gt;I didn’t have a clear plan when developing&lt;/li&gt;
+&lt;li&gt;It’s not as fun as I originally envision&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I need to work on my energy management and be more focus on my goal, it’s ok to give up but there has to be a good reason&lt;/p&gt;
+&lt;h2&gt;Action Points&lt;/h2&gt;
+&lt;h3&gt;Improve my investment skills&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Develop a methodology to evaluate a stock&lt;/li&gt;
+&lt;li&gt;Develop a strategy to take profit and cut loss&lt;/li&gt;
+&lt;li&gt;Iterate the strategy by learning from historical actions&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Be more careful and cautious&lt;/h3&gt;
+&lt;p&gt;I think it’s hard to suddenly become a careful person, I can however starts with some actionable things:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Double check a decision with experts&lt;/li&gt;
+&lt;li&gt;Think thrice when pulling a dependency, a dependency is a backdoor waiting to happen&lt;/li&gt;
+&lt;li&gt;Act slower when you’re dealing with something new that you aren’t familiar&lt;/li&gt;
+&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[Fix point combinator for higher kinded type]]></title><link>https://qingwei91.github.io/fix-to-higher-fix/</link><guid isPermaLink="false">https://qingwei91.github.io/fix-to-higher-fix/</guid><pubDate>Sun, 23 Dec 2018 00:00:00 GMT</pubDate><content:encoded></content:encoded></item><item><title><![CDATA[Scalameta tutorial: Cache decorator]]></title><description><![CDATA[This is a tutorial to show how to use Scalameta to develop a  generic, parameterized annotation .
+To know how to setup a project to use…]]></description><link>https://qingwei91.github.io/scalameta-tut/</link><guid isPermaLink="false">https://qingwei91.github.io/scalameta-tut/</guid><pubDate>Sat, 06 May 2017 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;This is a tutorial to show how to use Scalameta to develop a &lt;strong&gt;generic, parameterized annotation&lt;/strong&gt;.
 To know how to setup a project to use &lt;code class=&quot;language-text&quot;&gt;scalameta&lt;/code&gt;, refer to &lt;a href=&quot;http://scalameta.org/tutorial/#Setup&quot;&gt;official docs&lt;/a&gt;&lt;/p&gt;
 &lt;h2&gt;What is scalameta?&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&quot;http://scalameta.org/&quot;&gt;Scala-meta&lt;/a&gt; is the de-facto toolkit for metaprogramming in Scala. For those who are new to metaprogramming, it means programming against code/syntax/&lt;a href=&quot;https://en.wikipedia.org/wiki/Abstract_syntax_tree&quot;&gt;AST&lt;/a&gt;&lt;/p&gt;
@@ -229,7 +282,7 @@ To know how to setup a project to use &lt;code class=&quot;language-text&quot;&g
 &lt;p&gt;Here we end this tutorial, as we shown how could you create a generic, parameterize macro using scalameta.
 The code is availble &lt;a href=&quot;https://github.com/buaya91/scala-cache&quot;&gt;here&lt;/a&gt;
 As an exercise for readers, you can try to improve the cache so that it support async get and put.&lt;/p&gt;
-&lt;p&gt;Note: I am not claiming &lt;code class=&quot;language-text&quot;&gt;cache&lt;/code&gt; annotation is a good use-case of macro, ultimately it depends on your team and problem on hand. Nonetheless, I believe everyone should learn a bit of it to enhance your skills, and also to have better understanding on how compiler view your code.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[How multiplayer game sync their state? (Part 2)]]></title><description><![CDATA[Recap In  part 1 of the series , we discussed the following: Challenges faced in multiplayer game How to solve unresponsive UI by client…]]></description><link>https://gatsby-starter-blog-demo.netlify.com//multiplayer-game2/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com//multiplayer-game2/</guid><pubDate>Mon, 01 May 2017 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;&lt;span style=&quot;text-decoration: underline;&quot;&gt;Recap&lt;/span&gt;&lt;/h2&gt;
+&lt;p&gt;Note: I am not claiming &lt;code class=&quot;language-text&quot;&gt;cache&lt;/code&gt; annotation is a good use-case of macro, ultimately it depends on your team and problem on hand. Nonetheless, I believe everyone should learn a bit of it to enhance your skills, and also to have better understanding on how compiler view your code.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[How multiplayer game sync their state? (Part 2)]]></title><description><![CDATA[Recap In  part 1 of the series , we discussed the following: Challenges faced in multiplayer game How to solve unresponsive UI by client…]]></description><link>https://qingwei91.github.io/multiplayer-game2/</link><guid isPermaLink="false">https://qingwei91.github.io/multiplayer-game2/</guid><pubDate>Mon, 01 May 2017 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;&lt;span style=&quot;text-decoration: underline;&quot;&gt;Recap&lt;/span&gt;&lt;/h2&gt;
 &lt;p&gt;In &lt;a href=&quot;./multiplayer-game1&quot;&gt;part 1 of the series&lt;/a&gt;, we discussed the following:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Challenges faced in multiplayer game&lt;/li&gt;
@@ -474,7 +527,7 @@ building, I encourage you to explore some of those ideas by building a simple g
 &lt;li&gt;[Entity Interpolation] - &lt;a href=&quot;http://www.gabrielgambetta.com/fpm3.html&quot;&gt;http://www.gabrielgambetta.com/fpm3.html&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;http://gafferongames.com/networked-physics/snapshots-and-interpolation/&quot;&gt;&lt;span&gt;[Entity Interpolation] - &lt;/span&gt;http://gafferongames.com/networked-physics/snapshots-and-interpolation/&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;[Lag Compensation] - &lt;a href=&quot;https://developer.valvesoftware.com/wiki/Source_Multiplayer_Networking#Lag_compensation&quot;&gt;https://developer.valvesoftware.com/wiki/Source&lt;em&gt;Multiplayer&lt;/em&gt;Networking#Lag_compensation&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[Fantastic meetings and where to find them]]></title><description><![CDATA[Anecdotally most people in the software industry hate meetings; a meeting is a soul-sucking dementor. Jokes aside, I think it’s fair to say…]]></description><link>https://gatsby-starter-blog-demo.netlify.com//meetings/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com//meetings/</guid><pubDate>Sat, 01 Apr 2017 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Anecdotally most people in the software industry hate meetings; a meeting is a soul-sucking dementor. Jokes aside, I think it’s fair to say that people feel meetings are taking too much time and the process is often painful.&lt;/p&gt;
+&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[Fantastic meetings and where to find them]]></title><description><![CDATA[Anecdotally most people in the software industry hate meetings; a meeting is a soul-sucking dementor. Jokes aside, I think it’s fair to say…]]></description><link>https://qingwei91.github.io/meetings/</link><guid isPermaLink="false">https://qingwei91.github.io/meetings/</guid><pubDate>Sat, 01 Apr 2017 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Anecdotally most people in the software industry hate meetings; a meeting is a soul-sucking dementor. Jokes aside, I think it’s fair to say that people feel meetings are taking too much time and the process is often painful.&lt;/p&gt;
 &lt;p&gt;In this post, I’ll try to provide a few rules of thumb that I believe can make meetings less painful and more efficient.&lt;/p&gt;
 &lt;h2&gt;Rule 1: Always reiterate your goal before start&lt;/h2&gt;
 &lt;p&gt;How many times do you attend a meeting without a goal in mind?&lt;/p&gt;
@@ -539,7 +592,7 @@ you will get false sense of validation or invalidation on a decision as people a
 &lt;li&gt;&lt;strong&gt;Close to zero derailment&lt;/strong&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;People with the right information&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;I hope you find this post useful. Feedback is welcome. Feel free to drop me a message =)&lt;/p&gt;</content:encoded></item><item><title><![CDATA[How multiplayer game sync their state? (Part 1)]]></title><description><![CDATA[The main problem in multiplayer game In multiplayer game, one of the most complex issue is to keep all player’s state in sync with server…]]></description><link>https://gatsby-starter-blog-demo.netlify.com//multiplayer-game1/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com//multiplayer-game1/</guid><pubDate>Wed, 01 Mar 2017 00:00:00 GMT</pubDate><content:encoded>&lt;h3&gt;The main problem in multiplayer game&lt;/h3&gt;
+&lt;p&gt;I hope you find this post useful. Feedback is welcome. Feel free to drop me a message =)&lt;/p&gt;</content:encoded></item><item><title><![CDATA[How multiplayer game sync their state? (Part 1)]]></title><description><![CDATA[The main problem in multiplayer game In multiplayer game, one of the most complex issue is to keep all player’s state in sync with server…]]></description><link>https://qingwei91.github.io/multiplayer-game1/</link><guid isPermaLink="false">https://qingwei91.github.io/multiplayer-game1/</guid><pubDate>Wed, 01 Mar 2017 00:00:00 GMT</pubDate><content:encoded>&lt;h3&gt;The main problem in multiplayer game&lt;/h3&gt;
 &lt;p&gt;In multiplayer game, one of the most complex issue is to keep all player’s state in sync with server state.
 There are a few good articles around this topic on the internet. However, some details are missing here and there, which may be confusing for beginners in field of game programming, I hope I can clear things up in this article.&lt;/p&gt;
 &lt;p&gt;I’ll present a few techniques commonly used in this problem space.&lt;/p&gt;
