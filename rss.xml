@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[All models are wrong]]></title><description><![CDATA[I write stuff so I can forget.]]></description><link>https://qingwei91.github.io</link><generator>RSS for Node</generator><lastBuildDate>Sun, 10 Feb 2019 21:40:30 GMT</lastBuildDate><item><title><![CDATA[Fix point type for GADT (Scala)]]></title><description><![CDATA[Prerequisite This article assumes reader already know about Higher Kinded type (HKT) Fix point type Fix point type is a structure to…]]></description><link>https://qingwei91.github.io/higher-fix/</link><guid isPermaLink="false">https://qingwei91.github.io/higher-fix/</guid><pubDate>Fri, 08 Feb 2019 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;Prerequisite&lt;/h2&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[All models are wrong]]></title><description><![CDATA[I write stuff so I can forget.]]></description><link>https://qingwei91.github.io</link><generator>RSS for Node</generator><lastBuildDate>Wed, 13 Feb 2019 19:25:11 GMT</lastBuildDate><item><title><![CDATA[Fix point type for GADT (Scala)]]></title><description><![CDATA[Prerequisite This article assumes reader already know about Higher Kinded type (HKT) Fix point type Fix point type is a structure to…]]></description><link>https://qingwei91.github.io/higher-fix/</link><guid isPermaLink="false">https://qingwei91.github.io/higher-fix/</guid><pubDate>Fri, 08 Feb 2019 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;Prerequisite&lt;/h2&gt;
 &lt;p&gt;This article assumes reader already know about&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Higher Kinded type (HKT)&lt;/li&gt;
@@ -12,8 +12,8 @@
 &lt;li&gt;&lt;a href=&quot;https://free.cofree.io/2017/11/13/recursion/&quot;&gt;Recursion Schemes in Scala&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;Credit&lt;/h2&gt;
-&lt;p&gt;I learn most if not all of the techniques describe here from &lt;a href=&quot;https://github.com/nuttycom/xenomorph&quot;&gt;Xenomorph&lt;/a&gt; by Nuttycom, I find it fascinating and thought would be good to write it down.&lt;/p&gt;
-&lt;p&gt;Thanks Nuttycomb for sharing his idea with the open source world!&lt;/p&gt;
+&lt;p&gt;I learn most of the techniques described here from &lt;a href=&quot;https://github.com/nuttycom/xenomorph&quot;&gt;Xenomorph&lt;/a&gt; by Nuttycom, I find it interesting and thought would be good to write it down.&lt;/p&gt;
+&lt;p&gt;Thanks Nuttycomb for sharing his idea with the open source world! I also wish to thanks my coworker &lt;a href=&quot;https://github.com/Baccata/&quot;&gt;Olivier&lt;/a&gt; for introducing the idea of recursion scheme to me.&lt;/p&gt;
 &lt;h2&gt;Setup&lt;/h2&gt;
 &lt;p&gt;All code snippets can be run in &lt;a href=&quot;https://ammonite.io&quot;&gt;ammonite-repl&lt;/a&gt;, for ADT, you need to enclose them in curly brace like &lt;code class=&quot;language-text&quot;&gt;{ ...adt definiteion }&lt;/code&gt; before pasting to ammonite repl.&lt;/p&gt;
 &lt;h2&gt;What this post is about?&lt;/h2&gt;
