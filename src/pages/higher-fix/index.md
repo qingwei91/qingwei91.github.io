@@ -19,9 +19,9 @@ Resource for HKT and Fix point type
 
 ## Credit
 
-I learn most if not all of the techniques describe here from [Xenomorph](https://github.com/nuttycom/xenomorph) by Nuttycom, I find it fascinating and thought would be good to write it down.
+I learn most of the techniques described here from [Xenomorph](https://github.com/nuttycom/xenomorph) by Nuttycom, I find it interesting and thought would be good to write it down.
 
-Thanks Nuttycomb for sharing his idea with the open source world!
+Thanks Nuttycomb for sharing his idea with the open source world! I also wish to thanks my coworker [Olivier](https://github.com/Baccata/) for introducing the idea of recursion scheme to me.
 
 ## Setup
 

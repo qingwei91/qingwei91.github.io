@@ -45,7 +45,7 @@ question myself about
 2. implication, what are the side-effects that's gonna happen
 3. Have you tested the side-effectful code?
 
-### Comm related: I failed to stay cool when I am in tricky situation
+### Comm related: I need to stay cool when I am in tricky situation
 
 Reason 1: I am too eager to prove myself, and this often backfire
 
@@ -53,11 +53,9 @@ I need to learn that slowing down is beneficial for me, and also my team.
 
 ### Fixing issue: I failed to understand the problem at hand, and gave a wrong responses
 
-My first reaction should always be reproduce the error, find out the root cause,
-verify if the root cause is correct by trial and error.
+My first reaction should always be reproduce the error, find out the root cause, verify if the root cause is correct by trial and error.
 
 I should not try to make guess and shoot into the dark.
 
 ### Whenever proposing non-trivial change, always prepare a comprehensive argument and tradeoff
 
-### Stop cracking jokes that's borderline offensive, you can't handle that
