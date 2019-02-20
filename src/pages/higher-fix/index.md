@@ -9,33 +9,28 @@ This article assumes reader already know about
 * Higher Kinded type (HKT)
 * Fix point type
 
-Fix point type is a structure to describe recursive data in a generic way, ie. it's capable to describe any recursive data structure, and by abstracting over recursive data structure, we can define generic operation that works on any recursive data structure.
+Fix point type is a type that describes recursive data in a generic way. By abstracting over recursive data structure, we can define generic operation that works on any recursive data structure.
 
-Resource for HKT and Fix point type
+To learn more about HKT and Fix point type, check these links
 
 * [Typelevel blogs for HKT](https://typelevel.org/blog/2016/08/21/hkts-moving-forward.html)
 * [Rob Norris's awesome video about Fix Point Type and more](https://www.youtube.com/watch?v=7xSfLPD6tiQ)
 * [Recursion Schemes in Scala](https://free.cofree.io/2017/11/13/recursion/)
 
-## Credit
-
-I learn most of the techniques described here from [Xenomorph](https://github.com/nuttycom/xenomorph) by Nuttycom, I find it interesting and thought would be good to write it down.
-
-Thanks Nuttycomb for sharing his idea with the open source world! I also wish to thanks my coworker [Olivier](https://github.com/Baccata/) for introducing the idea of recursion scheme to me.
 
 ## Setup
 
-All code snippets can be run in [ammonite-repl](https://ammonite.io), for ADT, you need to enclose them in curly brace like `{ ...adt definiteion }` before pasting to ammonite repl.
+All code snippets can be run in [ammonite-repl](https://ammonite.io), for ADT definition, you need to enclose them in curly brace like `{ ...adt definiteion }` before pasting to ammonite repl.
 
 ## What this post is about?
 
-For the impatient, all code in this post can be found [here](https://gist.github.com/qingwei91/8079d8c731d352259e2d6334b2135300)
+All code in this post can be found [here](https://gist.github.com/qingwei91/8079d8c731d352259e2d6334b2135300)
 
-This post aims to document how to retain type information of Generalized Algebraic Data Type (GADT) with Fix point type. I will illustrate it by refactoring a GADT with recursion into another GADT without recursion, and implement `catamorphism` method for it.
+This post aims to document how to retain type information of Generalized Algebraic Data Type (GADT) with Fix point type. I will illustrate by refactoring a GADT with direct recursion into another GADT without recursion, and implement `catamorphism` method for it.
 
-This technique can be useful when the type param of your original recursive GADT is determined recursively. It might not makes sense so far, I suggest to carry on reading :)
+This technique can be useful when the type param of your original recursive GADT needs to be propagated through the layers of your recursive data structure. It might not makes sense now, I suggest carry on reading :)
 
-The following code snippet shows a GADT that describes Querying recursive data (eg. JSON). It is super simple, it can only query String or Boolean by path, but we can add things like QueryByWithCondition later.
+The following code snippet shows a GADT that describes how to query a recursive data (eg. JSON). It is super simple, it can only query String or Boolean by path, but we can add things like QueryByWithCondition later (not in the scope of this article).
 
 ```scala
 
@@ -73,7 +68,7 @@ val queryNestedString = QueryPath("my", QueryPath("oh", QueryString))
 typeMatch(queryString, queryNestedString)   // compiles
 ```
 
-This is useful because for any recursive query, we can know the result type statically.
+Having a type param is useful because for any recursive query, we can know the result type statically without traversing the tree, which is a runtime property.
 
 To apply recursion scheme, it's typical to follow the following steps
 
@@ -329,7 +324,7 @@ I tried to use simpler examples, for more complicated examples, check these proj
 * [Xenomorph](https://github.com/nuttycom/xenomorph/blob/master/modules/argonaut/src/main/scala/xenomorph/argonaut/FromJson.scala#L51)
 * [Basil](https://github.com/qingwei91/basil/blob/master/core/src/main/scala/basil/parser/JsonParse.scala#L447)
 
-## Conclusions:
+## Conclusion:
 
 So we've gone through how to apply recursion schemes on GADT, the basic idea is similar when applying recursion schemes on ADT, the main difference is that we need to operate on higher order, eg.
 
@@ -338,3 +333,9 @@ So we've gone through how to apply recursion schemes on GADT, the basic idea is 
 * `Algebra` with `(* -> *) -> * -> *` becomes HAlgebra `(* -> *) -> * -> * -> * -> * -> * -> *`
 
 Notice there's a common theme, the number of star doubled in the process, I have to admit I haven't fully understand why but I hope this article is still useful.
+
+## Credit
+
+I learn most of the techniques described here from [Xenomorph](https://github.com/nuttycom/xenomorph) by Nuttycom, I find it interesting and thought would be good to write it down.
+
+Thanks Nuttycomb for sharing his idea with the open source world! I also wish to thanks my coworker [Olivier](https://github.com/Baccata/) for introducing the idea of recursion scheme to me.
