@@ -330,7 +330,7 @@ We've walked through how to apply recursion schemes on a GADT. The basic idea is
 
 * `Functor` that takes a function (`* -> *`) becomes HFunctor that takes natural transformation `(* -> *) -> (* -> *)`
 * `Fix` with shape `(* -> *) -> *` becomes `HFix` with shape `((* -> *) -> (* -> *)) -> (* -> *)`
-* `Algebra` with `(* -> *) -> * -> *` becomes HAlgebra `(* -> *) -> * -> * -> * -> * -> * -> *`
+* `Algebra` with `(* -> *) -> * -> *` becomes HAlgebra `((* -> *) -> (* -> *)) -> (* -> *) -> (* -> *)`
 
 Notice there's a common theme, the number of stars doubled in the process, I haven't fully understood why but I hope this article is still useful.
 
@@ -338,4 +338,4 @@ Notice there's a common theme, the number of stars doubled in the process, I hav
 
 I learn most of the techniques described here from [Xenomorph](https://github.com/nuttycom/xenomorph) by Nuttycom, I find it interesting and thought would be good to write it down.
 
-Thanks Nuttycomb for sharing his idea with the open source world! I also wish to thanks my coworker [Olivier](https://github.com/Baccata/) for introducing the idea of recursion scheme to me.
+Thanks Nuttycomb for sharing his idea with the open source world! I also wish to thanks my coworker [Olivier](https://github.com/Baccata/) for introducing the idea of recursion scheme to me, and Alex for correcting me on notation of higher kinded type.
