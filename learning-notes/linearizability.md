@@ -41,7 +41,7 @@ A **legal sequential history** is a history of a sequential specification object
 Two histories are **equivalent** if all of their thread projections are equivalent.
 
 Sometimes it is convenient to think in terms of `operation call` which is a pair of corresponding `call` and `ret` event. 
-Operation calls in a history can be **partially ordered**, pperation call `op1` is considered < `op2` if `op1.ret` happens before `op2.call`.
+Operation calls in a history can be **partially ordered**, operation call `op1` is considered < `op2` if `op1.ret` happens before `op2.call`.
 
 #### Definition of linearizability
 
@@ -50,3 +50,49 @@ An object is linearizable if every complete history is linearizable and dead-loc
 A **complete** history is linearizable if it is equivalent to a **legal sequential history**, in other words, if our sequential specification object can produce a history S, such that S is equivalent to H, the H is linearizable.
 
 ### How to test?
+
+Let's formularize the test of linearizability of a completed history as follow
+
+Given a completed history `h`, return `true` if `h` is linearizable
+
+`Wing & Gong algorithm` is a way to test, the idea is to repeat all operations in history on the Sequential Specification Object (SSO), it repeats operations with the constraint that it always maintain partial order. This means that there can be a lot of different event sequences to be applied of the SSO, and the goal is to find one that matches the input history, by matching, we means that the response return by the SSO always match the response we've got in the input history h.
+
+In essence, linearizability test is a search problem where the state space grow exponentially with the input size.
+
+Gavin Lowe provides a possibly more efficient algorithm called `JIT linearization`
+
+The main differences between JIT and W&G are that
+
+JIT is faster because JIT algorithm make use of total ordering of history, and thus it is able to reduce the size of concurrent ops and thus reduce the overall state space.
+
+eg. if our history can guarantee that 
+
+OpA on Thread 1 happens after RetB of Thread 2, then we can guarantee T1:OpA and T2:OpB are NOT concurrent and thus reduce the state space
+
+The only problem is that to guarantee total order it has to rely on timestamp or some other synchronization mechanism     
+
+### Parallelize the test
+
+In essence, there are 2 parts when testing linearizability
+
+1. Generate linearized history `h'` from a concurrent history `h`, where `h'` equal to `h` by some definition of equality, check `equivalent` keyword above, for each `h`, there are a big number of linearized history `h'` (TODO: figure out how to determine the size)
+2. Run all the linearized histories through SSO and return true as long as we found a match, if there's no match, returns false
+
+I think we can try to speed things up by scaling horizontally, part 2 is trivially parallelizable, if we already have all the linearized histories, we can distribute them in a cluster and have each node runs the check, but it is not clear if this is a win as it might turns out step 1 is the bottleneck, although I doubt so
+
+It would be even better if we can parallelize step 1, it should be possible as the enumerating all possibility is a deterministic act, there should be a way only enumerate a subset of all possible history deterministically
+
+Rough idea: by fixing total order of 1 event, we would greatly reduce the possible state space by n?
+
+For example, given a sequence [1,2,3], we can have 3*2*1 possibilities  
+
+1,2,3
+1,3,2
+2,1,3
+2,3,1
+3,2,1
+3,1,1
+
+If the total order of `1` is fixed as 1st element, then there are only 2 possible state
+
+The actual algo for event history is more complicated as we need to consider partial order.

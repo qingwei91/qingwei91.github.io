@@ -66,4 +66,49 @@ This is straightforward, if we implement operations as ADT, then they can form F
 **How to implement a checker?**
 This is the hard part, I need to read more, different checker requires different algorithm, and how to write them in a way that is applicable to different model is tricky, eg. can a linearizability checker be applied to any kind of database (I think this is what they called a model), eg. KVStore or SQL database?
 
- 
+**How to test linearizability of distributed data structure?**
+
+Essentially this is a search problem, we want to find a way to arrange (aka linearize) the operations so that it is a valid sequential history. The main difficulty is that the search space is huge, it scales exponentially with input size.
+
+Idea: Can we figure out all the possible arrangement and parallelize the checking?
+
+Example history:
+
+T1 - Write A
+T1 - Read A
+T2 - Write B
+T2 - Write C
+
+Some possible arrangements:
+
+T1 - Write A
+T1 - Read A
+T2 - Write B
+T2 - Write C
+
+T1 - Write A
+T2 - Write B
+T1 - Read A
+T2 - Write C
+
+T2 - Write B
+T1 - Write A
+T1 - Read A
+T2 - Write C
+
+T2 - Write B
+T2 - Write C
+T1 - Write A
+T1 - Read A
+
+If we can efficiently enumerate all possibilities, then we can parallelize the checking 
+
+One way I can think of to compute all possibilities is as follow
+
+let linearized = []
+for lin in linearized:
+    1. Find minial op from history
+    2. computes all permutations of op + lin that respect partial order
+    3. remove lin from linearized
+    4. add all permutations back to linearized
+  
