@@ -117,4 +117,20 @@ Back to the original question: Why is this useful ?
 
 Being able to represent recursion in isolation (ie. without know the function we want to recurse), means that we can define operations related to recursion in isolation, and that is useful in programming because we can abstract them into common abstractions and reuse in a more principled way.
 
+## Fix for higher order type function
 
+function has shape of * -> *
+Higher order function **typically** has shape of (* -> *) -> (* -> *)  
+
+Fix is a value of domain of a function where fix(f) == f(fix(f))
+
+if f is higher order function, then the fix point has shape of (* -> *)
+
+let hfix be a function that returns fixed point of higher order function 
+
+hfix(hf) == hf(hfix(hf)) where
+
+hfix: (* -> *) -> (* -> *) -> (* -> *)
+hf: (* -> *) -> (* -> *)
+
+type HFix[HF[_[_], _], A] = HF[HFix[HF, ?], A] 
