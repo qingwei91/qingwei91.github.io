@@ -56,9 +56,15 @@ class BlogIndex extends React.Component {
           meta={[{ name: 'description', content: siteDescription }]}
           title={siteTitle}
         />
-        <Link to="/fix-principle">
-          Slides of "Fix Point from First Principle" presentation
-        </Link>
+        <h3
+          style={{
+            marginBottom: rhythm(1 / 4),
+          }}
+        >
+          <Link style={{ boxShadow: 'none' }} to="/fix-principle.html">
+            Slides of "Fix Point from First Principle" presentation
+          </Link>
+        </h3>
         {posts.map(({ node }) => {
           const title = node.frontmatter.title || node.fields.slug
           return (
