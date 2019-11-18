@@ -128,4 +128,14 @@ case class NodeState(
 
 ---
 
+#### Ref
+
+var on steroid, used to model mutable state that is accessed concurrently
+
+```jsx
+trait Ref[F[_]A] {
+  def get: F[A]
+  def update(f: A => A): F[Unit]
+}
+``` 
 
