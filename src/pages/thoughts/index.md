@@ -1,6 +1,7 @@
 ---
 title: "Thoughts"
 date: "2019-07-14"
+status: WIP
 ---
 
 ## My random thoughts

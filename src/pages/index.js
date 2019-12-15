@@ -56,16 +56,9 @@ class BlogIndex extends React.Component {
           meta={[{ name: 'description', content: siteDescription }]}
           title={siteTitle}
         />
-        <h3
-          style={{
-            marginBottom: rhythm(1 / 4),
-          }}
-        >
-          <Link style={{ boxShadow: 'none' }} to="/fix-principle.html">
-            Slides of "Fix Point from First Principle" presentation
-          </Link>
-        </h3>
-        {posts.map(({ node }) => {
+        {posts
+          .filter(({node}) => {return node.frontmatter.status !== 'WIP'})
+          .map(({ node }) => {
           const title = node.frontmatter.title || node.fields.slug
           return (
             <div key={node.fields.slug}>
@@ -79,7 +72,6 @@ class BlogIndex extends React.Component {
                 </Link>
               </h3>
               <small>{node.frontmatter.date}</small>
-              <p dangerouslySetInnerHTML={{ __html: node.excerpt }} />
             </div>
           )
         })}
@@ -109,6 +101,7 @@ export const pageQuery = graphql`
           frontmatter {
             date(formatString: "MMMM DD, YYYY")
             title
+            status
           }
         }
       }

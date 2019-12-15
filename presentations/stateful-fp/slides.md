@@ -2,7 +2,7 @@
 
 ---
 
-# Stateful-ness
+## Stateful-ness
 
 ```scala
 def someApplication(i: Int): Int
@@ -17,17 +17,13 @@ someApplication(12) // 40
 
 ## Raft Algorithm
 
-Distributed consensus algorithm, inherently stateful 
+Distributed consensus algorithm  
 
 ---
 
-## Properties of Raft
+#### Leader based algorithm
 
-nnn
-
-#### Leader based
-
-#### all writes go through Leader
+> All writes go through Leader
 
 nnn
 
@@ -40,20 +36,16 @@ nnn
 
 ### RPC Life-cycle
 
-* Sender Initiation (Phase 1)
-* Request In Flight
-* Receiver Handling (Phase 2)
-* Response In Flight
-* Sender Completion  (Phase 3)
+![rpc-life-cycle](assets/rpc-anatomy.png)
 
 nnn
 
-![rpc-life-cycle]()
-Show all 5 phases, where 3 of them is our code and thus our focus
+### Correctness guarantee 
 
-nnn
-
-### Raft requires each process have access to persistent storage
+* Tolerate node crash
+* Tolerate incorrect time
+* Tolerate network partition
+* Requires persistent storage
 
 ---
 
@@ -72,7 +64,7 @@ RaftCluster.read();   // return 20
 
 ## Cluster Setup
 
-![ThreeNodesDiagram](/someimg)
+![ThreeNodesDiagram](assets/cluster.svg)
 
 ---
 
@@ -80,14 +72,14 @@ RaftCluster.read();   // return 20
 
 | Initial | Desired |
 | ------- | ------- |
-| ![img]() | ![img]() |
+| ![img](assets/cluster.svg) | ![img](assets/elected.svg) |
 
 ---
 
-## Leader election flow
+## Leader election
 
-1. Periodically run a checking process   
-2. Start an election if needed:
+1. Periodically check if there's leader   
+2. Start an election if no leader:
     - Update state to become candidate, and vote for self
     - broadcast VotingRequest
 
@@ -99,20 +91,18 @@ RaftCluster.read();   // return 20
 import cats.effect.Timer
 import fs2.Stream
 
-trait RaftAlgorithm[F[_]] {
-
-  def raftProcess[F[_]: Timer](randomTime: F[FiniteDuration]): Stream[F, Unit] = {
-    Stream.repeatEval {
-      for {
-        wait <- randomTime
-        _    <- Timer[F].sleep(wait)
-        .... 
-      } yield ()
-    } 
-  }
-    
-  def voteRPCStart: F[Unit] = ???
+def raftProcess[F[_]: Timer](
+  randomTime: F[FiniteDuration]
+): Stream[F, Unit] = {
+  Stream.repeatEval {
+    for {
+      wait <- randomTime
+      _    <- Timer[F].sleep(wait)
+      .... 
+    } yield ()
+  } 
 }
+    
 ```
 
 ---
@@ -120,31 +110,28 @@ trait RaftAlgorithm[F[_]] {
 ### Vote RPC Phase 1: Initiation
 
 ```scala
-trait RaftAlgorithm[F[_]] {
-    
-  def voteRPCStart: F[Unit] = {
-    for {
-      noLeader   <- checkNoLeader   
-      responses  <- if (noLeader) {
-              startElection 
-            } else {
-              F.pure(...) // do nothing 
-            }
+def voteRPCStart: F[Unit] = {
+  for {
+    leaderExists   <- checkLeaderExists   
+    responses  <- if (!leaderExists) {
+                    startElection 
+                  } else {
+                    F.pure(...) // do nothing 
+                  }
        ...
-    } yield {
-    }  
-  }
+  } yield {}  
 }
+
 
 ```
 
 nnn
 
-How to implement **checkHasLeader**?
+How to implement **checkLeaderExists**?
 
 ```scala
 
-def checkHasLeader: F[Boolean] = {
+def checkLeaderExists: F[Boolean] = {
   // check some state ...
 }
 
@@ -157,7 +144,7 @@ case class NodeState(
   leader: Option[String]
 )
 
-def checkHasLeader(state: Ref[F, NodeState]): F[Boolean] = {
+def checkLeaderExists(state: Ref[F, NodeState]): F[Boolean] = {
   for {
     nodeState <- state.get
   } yield {
@@ -168,15 +155,45 @@ def checkHasLeader(state: Ref[F, NodeState]): F[Boolean] = {
 
 nnn
 
-#### Meet `Ref`
+### `Ref`
 
-**var** on steroid, used to model mutable state that is accessed concurrently
+Functional **var**, model mutable state that can be accessed concurrently
 
 ```scala
 trait Ref[F[_], A] {
   def get: F[A]
   def update(f: A => A): F[Unit]
 }
+```
+
+nnn
+
+### Ref is useful for 
+
+```markdown
+* Model mutable in-memory state
+* Concurrent access to state
+* Atomic modification
+```
+
+nnn
+
+#### Continue ...
+
+```scala
+def voteRPCStart: F[Unit] = {
+  for {
+    leaderExists   <- checkLeaderExists   
+    responses  <- if (!leaderExists) {
+                    startElection 
+                  } else {
+                    F.pure(...) // do nothing 
+                  }
+       ...
+  } yield {}  
+}
+
+
 ```
 
 nnn
@@ -196,11 +213,6 @@ def startElection: F[Unit] = {
 nnn
 
 ```scala
-case class NodeState(
-  leader: Option[String],
-  tpe: String,
-  votedFor: Option[String]
-)
 
 def startElection(
   selfId: String, 
@@ -222,17 +234,9 @@ def startElection(
 
 nnn
 
-## Ref is useful for 
-
-* Model mutable in-memory state
-* Concurrent access to state
-* Atomic modification
-
-nnn
-
 ### Broadcast request
 
-![broadcast req diagram]()
+![broadcast req diagram](assets/broadcastvotes.svg)
 
 ---
 

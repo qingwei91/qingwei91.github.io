@@ -1,13 +1,9 @@
-# reveal.js [![Build Status](https://travis-ci.org/hakimel/reveal.js.svg?branch=master)](https://travis-ci.org/hakimel/reveal.js) <a href="https://slides.com?ref=github"><img src="https://s3.amazonaws.com/static.slid.es/images/slides-github-banner-320x40.png?1" alt="Slides" width="160" height="20"></a>
+# reveal.js 
 
 A framework for easily creating beautiful presentations using HTML. [Check out the live demo](http://revealjs.com/).
 
-reveal.js comes with a broad range of features including [nested slides](https://github.com/hakimel/reveal.js#markup), [Markdown contents](https://github.com/hakimel/reveal.js#markdown), [PDF export](https://github.com/hakimel/reveal.js#pdf-export), [speaker notes](https://github.com/hakimel/reveal.js#speaker-notes) and a [JavaScript API](https://github.com/hakimel/reveal.js#api). There's also a fully featured visual editor and platform for sharing reveal.js presentations at [slides.com](https://slides.com?ref=github).
-
-
 ## Table of contents
 
-- [Online Editor](#online-editor)
 - [Installation](#installation)
   - [Basic setup](#basic-setup)
   - [Full setup](#full-setup)
@@ -57,32 +53,7 @@ reveal.js comes with a broad range of features including [nested slides](https:/
 - [MathJax](#mathjax)
 - [License](#license)
 
-#### More reading
-
-- [Changelog](https://github.com/hakimel/reveal.js/releases): Up-to-date version history.
-- [Examples](https://github.com/hakimel/reveal.js/wiki/Example-Presentations): Presentations created with reveal.js, add your own!
-- [Browser Support](https://github.com/hakimel/reveal.js/wiki/Browser-Support): Explanation of browser support and fallbacks.
-- [Plugins](https://github.com/hakimel/reveal.js/wiki/Plugins,-Tools-and-Hardware): A list of plugins that can be used to extend reveal.js.
-
-
-## Online Editor
-
-Presentations are written using HTML or Markdown but there's also an online editor for those of you who prefer a graphical interface. Give it a try at [https://slides.com](https://slides.com?ref=github).
-
-
 ## Installation
-
-The **basic setup** is for authoring presentations only. The **full setup** gives you access to all reveal.js features and plugins such as speaker notes as well as the development tasks needed to make changes to the source.
-
-### Basic setup
-
-The core of reveal.js is very easy to install. You'll simply need to download a copy of this repository and open the index.html file directly in your browser.
-
-1. Download the latest version of reveal.js from <https://github.com/hakimel/reveal.js/releases>
-2. Unzip and replace the example contents in index.html with your own
-3. Open index.html in a browser to view it
-
-### Full setup
 
 Some reveal.js features, like external Markdown and speaker notes, require that presentations run from a local web server. The following instructions will set up such a server as well as all of the development tasks needed to make edits to the reveal.js source code.
 
@@ -483,47 +454,6 @@ Reveal.addEventListener( 'ready', function( event ) {
 
 Note that we also add a `.ready` class to the `.reveal` element so that you can hook into this with CSS.
 
-### Auto-sliding
-
-Presentations can be configured to progress through slides automatically, without any user input. To enable this you will need to tell the framework how many milliseconds it should wait between slides:
-
-```javascript
-// Slide every five seconds
-Reveal.configure({
-  autoSlide: 5000
-});
-```
-
-When this is turned on a control element will appear that enables users to pause and resume auto-sliding. Alternatively, sliding can be paused or resumed by pressing »A« on the keyboard. Sliding is paused automatically as soon as the user starts navigating. You can disable these controls by specifying `autoSlideStoppable: false` in your reveal.js config.
-
-You can also override the slide duration for individual slides and fragments by using the `data-autoslide` attribute:
-
-```html
-<section data-autoslide="2000">
-	<p>After 2 seconds the first fragment will be shown.</p>
-	<p class="fragment" data-autoslide="10000">After 10 seconds the next fragment will be shown.</p>
-	<p class="fragment">Now, the fragment is displayed for 2 seconds before the next slide is shown.</p>
-</section>
-```
-
-To override the method used for navigation when auto-sliding, you can specify the `autoSlideMethod` setting. To only navigate along the top layer and ignore vertical slides, set this to `Reveal.navigateRight`.
-
-Whenever the auto-slide mode is resumed or paused the `autoslideresumed` and `autoslidepaused` events are fired.
-
-### Keyboard Bindings
-
-If you're unhappy with any of the default keyboard bindings you can override them using the `keyboard` config option:
-
-```javascript
-Reveal.configure({
-  keyboard: {
-    13: 'next', // go to the next slide when the ENTER key is pressed
-    27: function() {}, // do something custom when ESC is pressed
-    32: null // don't do anything when SPACE is pressed (i.e. disable a reveal.js default binding)
-  }
-});
-```
-
 ### Vertical Slide Navigation
 
 Slides can be nested within other slides to create vertical stacks (see [Markup](#markup)). When presenting, you use the left/right arrows to step through the main (horizontal) slides. When you arrive at a vertical stack you can optionally press the up/down arrows to view the vertical slides or skip past them by pressing the right arrow. Here's an example showing a bird's-eye view of what this looks like in action:
@@ -643,170 +573,6 @@ Reveal.isAutoSliding();
 getRevealElement(); // <div class="reveal">...</div>
 ```
 
-### Custom Key Bindings
-
-Custom key bindings can be added and removed using the following Javascript API. Custom key bindings will override the default keyboard bindings, but will in turn be overridden by the user defined bindings in the ``keyboard`` config option.
-
-```javascript
-Reveal.addKeyBinding( binding, callback );
-Reveal.removeKeyBinding( keyCode );
-```
-
-For example
-
-```javascript
-// The binding parameter provides the following properties
-//      keyCode: the keycode for binding to the callback
-//          key: the key label to show in the help overlay
-//  description: the description of the action to show in the help overlay
-Reveal.addKeyBinding( { keyCode: 84, key: 'T', description: 'Start timer' }, function() {
-	// start timer
-} )
-
-// The binding parameter can also be a direct keycode without providing the help description
-Reveal.addKeyBinding( 82, function() {
-	// reset timer
-} )
-```
-
-This allows plugins to add key bindings directly to Reveal so they can
-
-* make use of Reveal's pre-processing logic for key handling (for example, ignoring key presses when paused); and
-* be included in the help overlay (optional)
-
-### Slide Changed Event
-
-A `slidechanged` event is fired each time the slide is changed (regardless of state). The event object holds the index values of the current slide as well as a reference to the previous and current slide HTML nodes.
-
-Some libraries, like MathJax (see [#226](https://github.com/hakimel/reveal.js/issues/226#issuecomment-10261609)), get confused by the transforms and display states of slides. Often times, this can be fixed by calling their update or render function from this callback.
-
-```javascript
-Reveal.addEventListener( 'slidechanged', function( event ) {
-	// event.previousSlide, event.currentSlide, event.indexh, event.indexv
-} );
-```
-
-### Presentation State
-
-The presentation's current state can be fetched by using the `getState` method. A state object contains all of the information required to put the presentation back as it was when `getState` was first called. Sort of like a snapshot. It's a simple object that can easily be stringified and persisted or sent over the wire.
-
-```javascript
-Reveal.slide( 1 );
-// we're on slide 1
-
-var state = Reveal.getState();
-
-Reveal.slide( 3 );
-// we're on slide 3
-
-Reveal.setState( state );
-// we're back on slide 1
-```
-
-### Slide States
-
-If you set `data-state="somestate"` on a slide `<section>`, "somestate" will be applied as a class on the document element when that slide is opened. This allows you to apply broad style changes to the page based on the active slide.
-
-Furthermore you can also listen to these changes in state via JavaScript:
-
-```javascript
-Reveal.addEventListener( 'somestate', function() {
-	// TODO: Sprinkle magic
-}, false );
-```
-
-### Slide Backgrounds
-
-Slides are contained within a limited portion of the screen by default to allow them to fit any display and scale uniformly. You can apply full page backgrounds outside of the slide area by adding a `data-background` attribute to your `<section>` elements. Four different types of backgrounds are supported: color, image, video and iframe.
-
-#### Color Backgrounds
-
-All CSS color formats are supported, including hex values, keywords, `rgba()` or `hsl()`.
-
-```html
-<section data-background-color="#ff0000">
-	<h2>Color</h2>
-</section>
-```
-
-#### Image Backgrounds
-
-By default, background images are resized to cover the full page. Available options:
-
-| Attribute                        | Default    | Description |
-| :------------------------------- | :--------- | :---------- |
-| data-background-image            |            | URL of the image to show. GIFs restart when the slide opens. |
-| data-background-size             | cover      | See [background-size](https://developer.mozilla.org/docs/Web/CSS/background-size) on MDN.  |
-| data-background-position         | center     | See [background-position](https://developer.mozilla.org/docs/Web/CSS/background-position) on MDN. |
-| data-background-repeat           | no-repeat  | See [background-repeat](https://developer.mozilla.org/docs/Web/CSS/background-repeat) on MDN. |
-| data-background-opacity          | 1          | Opacity of the background image on a 0-1 scale. 0 is transparent and 1 is fully opaque. |
-
-```html
-<section data-background-image="http://example.com/image.png">
-	<h2>Image</h2>
-</section>
-<section data-background-image="http://example.com/image.png" data-background-size="100px" data-background-repeat="repeat">
-	<h2>This background image will be sized to 100px and repeated</h2>
-</section>
-```
-
-#### Video Backgrounds
-
-Automatically plays a full size video behind the slide.
-
-| Attribute                        | Default | Description |
-| :---------------------------     | :------ | :---------- |
-| data-background-video            |         | A single video source, or a comma separated list of video sources. |
-| data-background-video-loop       | false   | Flags if the video should play repeatedly. |
-| data-background-video-muted      | false   | Flags if the audio should be muted. |
-| data-background-size             | cover   | Use `cover` for full screen and some cropping or `contain` for letterboxing. |
-| data-background-opacity          | 1       | Opacity of the background video on a 0-1 scale. 0 is transparent and 1 is fully opaque. |
-
-```html
-<section data-background-video="https://s3.amazonaws.com/static.slid.es/site/homepage/v1/homepage-video-editor.mp4,https://s3.amazonaws.com/static.slid.es/site/homepage/v1/homepage-video-editor.webm" data-background-video-loop data-background-video-muted>
-	<h2>Video</h2>
-</section>
-```
-
-#### Iframe Backgrounds
-
-Embeds a web page as a slide background that covers 100% of the reveal.js width and height. The iframe is in the background layer, behind your slides, and as such it's not possible to interact with it by default. To make your background interactive, you can add the `data-background-interactive` attribute.
-
-```html
-<section data-background-iframe="https://slides.com" data-background-interactive>
-	<h2>Iframe</h2>
-</section>
-```
-
-#### Background Transitions
-
-Backgrounds transition using a fade animation by default. This can be changed to a linear sliding transition by passing `backgroundTransition: 'slide'` to the `Reveal.initialize()` call. Alternatively you can set `data-background-transition` on any section with a background to override that specific transition.
-
-
-### Parallax Background
-
-If you want to use a parallax scrolling background, set the first two properties below when initializing reveal.js (the other two are optional).
-
-```javascript
-Reveal.initialize({
-
-	// Parallax background image
-	parallaxBackgroundImage: '', // e.g. "https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg"
-
-	// Parallax background size
-	parallaxBackgroundSize: '', // CSS syntax, e.g. "2100px 900px" - currently only pixels are supported (don't use % or auto)
-
-	// Number of pixels to move the parallax background per slide
-	// - Calculated automatically unless specified
-	// - Set to 0 to disable movement along an axis
-	parallaxBackgroundHorizontal: 200,
-	parallaxBackgroundVertical: 50
-
-});
-```
-
-Make sure that the background size is much bigger than screen size to allow for some scrolling. [View example](http://revealjs.com/?parallaxBackgroundImage=https%3A%2F%2Fs3.amazonaws.com%2Fhakim-static%2Freveal-js%2Freveal-parallax-1.jpg&parallaxBackgroundSize=2100px%20900px).
-
 ### Slide Transitions
 
 The global presentation transition is set using the `transition` config value. You can override the global transition for a specific slide by using the `data-transition` attribute:
@@ -841,6 +607,8 @@ You can also use different in and out transitions for the same slide:
 </section>
 ```
 You can choose from `none`, `fade`, `slide`, `convex`, `concave` and `zoom`.
+
+
 ### Internal links
 
 It's easy to link between slides. The first example below targets the index of another slide whereas the second targets a slide with an ID attribute (`<section id="some-slide">`):
@@ -1089,50 +857,6 @@ Reveal.initialize({
 	postMessageEvents: false
 });
 ```
-
-
-## PDF Export
-
-Presentations can be exported to PDF via a special print stylesheet. This feature requires that you use [Google Chrome](http://google.com/chrome) or [Chromium](https://www.chromium.org/Home) and to be serving the presentation from a web server.
-Here's an example of an exported presentation that's been uploaded to SlideShare: http://www.slideshare.net/hakimel/revealjs-300.
-
-### Separate pages for fragments
-[Fragments](#fragments) are printed on separate slides by default. Meaning if you have a slide with three fragment steps, it will generate three separate slides where the fragments appear incrementally.
-
-If you prefer printing all fragments in their visible states on the same slide you can set the `pdfSeparateFragments` config option to false.
-
-### Page size
-
-Export dimensions are inferred from the configured [presentation size](#presentation-size). Slides that are too tall to fit within a single page will expand onto multiple pages. You can limit how many pages a slide may expand onto using the `pdfMaxPagesPerSlide` config option, for example `Reveal.configure({ pdfMaxPagesPerSlide: 1 })` ensures that no slide ever grows to more than one printed page.
-
-### Print stylesheet
-
-To enable the PDF print capability in your presentation, the special print stylesheet at [/css/print/pdf.css](https://github.com/hakimel/reveal.js/blob/master/css/print/pdf.css) must be loaded. The default index.html file handles this for you when `print-pdf` is included in the query string. If you're using a different HTML template, you can add this to your HEAD:
-
-```html
-<script>
-	var link = document.createElement( 'link' );
-	link.rel = 'stylesheet';
-	link.type = 'text/css';
-	link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-	document.getElementsByTagName( 'head' )[0].appendChild( link );
-</script>
-```
-
-### Instructions
-
-1. Open your presentation with `print-pdf` included in the query string i.e. http://localhost:8000/?print-pdf. You can test this with [revealjs.com?print-pdf](http://revealjs.com?print-pdf).
-  * If you want to include [speaker notes](#speaker-notes) in your export, you can append `showNotes=true` to the query string: http://localhost:8000/?print-pdf&showNotes=true
-1. Open the in-browser print dialog (CTRL/CMD+P).
-1. Change the **Destination** setting to **Save as PDF**.
-1. Change the **Layout** to **Landscape**.
-1. Change the **Margins** to **None**.
-1. Enable the **Background graphics** option.
-1. Click **Save**.
-
-![Chrome Print Settings](https://s3.amazonaws.com/hakim-static/reveal-js/pdf-print-settings-2.png)
-
-Alternatively you can use the [decktape](https://github.com/astefanutti/decktape) project.
 
 
 ## Theming

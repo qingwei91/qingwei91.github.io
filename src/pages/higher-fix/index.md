@@ -22,9 +22,9 @@ To learn more about HKT and Fix point type, check these links.
 
 You can run all code snippets in [ammonite-repl](https://ammonite.io), for ADT definition, you need to enclose them in a curly brace like `{ ...adt definition }` before pasting to ammonite repl.
 
-## What this post is about?
-
 You can find all of the code used in this post [here](https://gist.github.com/qingwei91/8079d8c731d352259e2d6334b2135300)
+
+## What is this post about?
 
 This post aims to document how to retain type information of Generalized Algebraic Data Type (GADT) with Fix point type. I will illustrate the technique by refactoring a GADT with direct recursion into another GADT without recursion and implement `catamorphism` method for it.
 
@@ -68,7 +68,7 @@ val queryNestedString = QueryPath("my", QueryPath("oh", QueryString))
 typeMatch(queryString, queryNestedString)   // compiles
 ```
 
-Having a type param is useful because, for any recursive query, we can know the result type statically without traversing the tree, which is a runtime property.
+Having a type param is useful because, for any recursive query, we can `know the result type statically without traversing the tree`, which is a runtime property.
 
 The following steps are common when applying recursion schemes.
 
@@ -133,7 +133,15 @@ Fix(QueryPathF("key", Fix(QueryStringF))
 
 Because the type signature does not match, `Fix` constructor takes a type param with `* -> *` kind (commonly pronounce as Star to Star), encoded as `F[_]` in Scala, but `QueryF` has kind of `(* -> *) -> * -> *`, as it takes a `F[_]` and `A` and returns a proper type (ie. a Star type)
 
-The solution for this problem is to create a new `HFix` type that matches the type signature of `QueryF`
+> Insights: Fundamentally, `Fix point` exists for any kind of functions. The regular `Fix` type is actually a fix point of `F[_]` which is a type level function, it takes a `F[_]` and produce `F[Fix[F]]` 
+
+The solution for this problem is to create a different `Fix` type that can handle `QueryF`, which is a different function.
+
+We can start by writing out the kind/shape of `QueryF`, it looks like this: `(* -> *) -> * -> *`, meaning it takes a type level function and a proper type and returns a proper type.
+
+The fix point of such a kind should takes this type as an input, and Scala is powerful enough to express such idea using HKT syntax
+
+`F[_[_], _]` is the syntax to represent a type level function with this kind: `(* -> *) -> * -> *`, then our special HFix for QueryF will looks like below:
 
 ```scala
 case class HFix[F[_[_], _], A](unfix: F[HFix[F, ?], A])
@@ -144,6 +152,21 @@ This looks a bit scary, let's try to break it down.
 * the 1st type param `F[_[_], _]` is a type constructor that takes 2 type params, a HKT `* -> *` and a proper type `*`
 * 2nd type param is just a proper type, bind to symbol `A`
 * `unfix` becomes `F[HFix[F, ?], A]`, remember `F` takes a `* -> *` on 1st type param, which is the kind of `HFix[F, ?]`, the 2nd type param would then be `A` so that we propagate it across layers of recursion
+
+### How do we determine the shape of `HFix` ?
+
+To determine the shape of `HFix`, let's go back to basic:
+
+> fix(f) = f(fix(f))
+
+With this formula, we use algebra to solve:
+
+* QF = ((* -> *) -> * -> *)
+* Fix = QF -> k where QF(k) = k
+* QF(k) = k if k = * -> *
+* Fix = QF -> * -> * = `((* -> *) -> * -> *) -> * -> *`
+
+The shape of HFix should be `((* -> *) -> * -> *) -> * -> *`, the key is to figure out what `k` should be
 
 I think it's worth to emphasize 2 points
 

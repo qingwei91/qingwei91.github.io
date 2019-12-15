@@ -96,3 +96,7 @@ For example, given a sequence [1,2,3], we can have 3*2*1 possibilities
 If the total order of `1` is fixed as 1st element, then there are only 2 possible state
 
 The actual algo for event history is more complicated as we need to consider partial order.
+
+## Caveat with timeout
+
+If an operation timeout or failed with unknown reason, then we need to assume that such operation can complete anytime after it was initiated, or never complete, this make linearizability check exponentially expensive but is necessary to ensure correctness.

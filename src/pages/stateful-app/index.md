@@ -1,5 +1,6 @@
-# Build Stateful with fs2, cats-effect
-
+---
+title: Build Stateful with fs2, cats-effect
+status: "WIP"
 ---
 
 # Stateful-ness
