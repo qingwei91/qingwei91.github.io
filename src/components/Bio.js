@@ -18,7 +18,7 @@ class Bio extends React.Component {
           marginBottom: rhythm(2.5),
         }}
       >
-        <div>I am software developer. I am fascinated by complexity, I am currently interested in Distributed System.</div>
+        <div>I like to talk about stuff I have no idea about. Sometimes I even write about them.</div>
       </div>
       </div>
     )
