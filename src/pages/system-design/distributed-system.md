@@ -51,7 +51,9 @@ Be aware on dependency of system time, in theory distributed system should rely 
 
 Availability refers to the ability of the system to continue it's operation even when part of the system is down.
 
-### Throughput and Latency
+### Timeout
+
+In distributed system, it is inevitable to have timeout, because network partition can happen anytime. Timeout brings a lot of complexity to our system because when an operation timed out on the caller, the operation might actually finished, or failed on the callee, or worse it might finished later, which the caller has no visibility at all.
 
 ### Idempotency
 
