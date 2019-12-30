@@ -137,3 +137,25 @@ The approximation works poorly when the range of count is small, range of count 
 
 mean = n*p
 variance = np(1-p)
+
+# Inference!!
+
+### Sampling distribution
+
+Given a population `P`, a sample size `A`, a parameter `u`, we can get sampling distributiom by repeatedly take `A` sample from `P` independently, and calculate `u` for each sample, the collective result of all `u` is called sampling distribution
+
+### Standard Error
+
+Given a population `P`, with mean `E`, say we make sampling distribution `D` of `P`, then we can find the std dev of `D`, called `sd`, with `sd` we can find `Standard Error (SE)` of our estimate obtained by each sample with respect to `P`:
+
+> SE = sd/sqrt(N), where N equals to sample size (Warning: Not total number of samples)
+
+### Problem of confidence interval
+
+To reject null hypothesis, we need strong evidence, one way is to use confidence interval to check if the predicted outcome falls into the interval or not, this has a problem that it does not quantify the strength of our evidence, eg. if alternative hypothesis predicted an outcome that is outside of our 95% confidence interval, it is not clear how far we are
+
+P-value allegedly solves this problem
+
+In essence, p-value is measure
+
+> Assuming null hypothesis is true, what is the probability to get an observation of that is in favor of alternative hypothesis, if p-value is high, it means it might be due to chance, in some sense it means observation is not too different from prediction of null hypothesis.
