@@ -27,4 +27,18 @@ Not bad, there are something I dont quite understand yet eg. how my boss decide 
 1. When picking tools, use a use-case oriented approach, this is why writing things down is important
 2. It is important to have sprint goal as a unifying theme, unifying theme is abstraction, abstraction makes things manageable 
 3. When you come across good content, remember to save it as you might not be able to find it next time you need it
-4.  
+
+# 11~22/03/2020
+## What happened?
+Working from home due to COVID
+
+## How you feel?
+Calm
+
+## What have you learn?
+1. Prioritize ability to test if the component is going to undergo changes, because changes on non-trivial piece likely induce bug, and without test facility the cost of fixing issue can get too big
+2. BigTable is a SSTable, it stores all data that has been written in cells, and only remove old cells during garbage collection, this means two things: 
+  * If a row is write heavy, we are going to get a lots of cells
+  * Always use cell-count filter when querying BigTable
+3. Prioritize Monitoring and Alerting on system you're unfamiliar with  
+
