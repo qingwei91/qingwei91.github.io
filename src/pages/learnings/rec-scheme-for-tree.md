@@ -1,6 +1,7 @@
 ---
 title: A failed attempt to visualize linearizability check
 date: "2020-01-12"
+status: "WIP"
 ---
 
 Lately, I am learning `Linearizability check` algorithm, which is a kind of algorithm to check if a particular system is linearizable or not.

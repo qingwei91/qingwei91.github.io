@@ -201,7 +201,7 @@ There are various way to improve time management, but the book focuses on the me
 * Find out the limiting steps, this can be activities that has to happen at certain time, and you will have to plan other activities around it 
 * Batch similar tasks: many tasks require some amount of setup, if there are multiple tasks that requires on the same setup, then it is more efficient to do them together, note that it does not necessarily need to be physical, it can be mental setup, for example answering emails in batch can be more efficient as you stay in the same context throughout the process, compared to answer a few emails every now and then throughout the day
 
-### 23. Organize manager's workflow like a factory
+### 23. Organize managers workflow like a factory
 
 #### Principle 1: Manage work by forecasting
 
@@ -236,4 +236,49 @@ Keep a list of things that can increase your leverage but does not need to finis
 
 Factory operations follow a strict set of rules and process to ensure reproducibility, we should do the same in our work. Having consistent approach brings in similar benefit, but we should remind ourselves to regularly revise the process to not fall into the trap of `Appeal to tradition`.
 
-  
+#### Principle 6: Reduce interruption
+
+As mentioned earlier, we should run our day to day operation like a factory, not a job shop, that means we should strive to have regular, predictable workload. We should try to avoid interruption throughout the day. Occasionally, we are forced to divert our attention due to emergency, while this is not completely avoidable, we should always be looking for the source of next issue proactively using monitoring technique so that we can choose when to handle it rather than being forced to handle it when it is too late.
+
+ We also observe that interruptions are typically not unique and often can be answered with standard responses, it makes sense to prepare standard responses for interruptions that can be anticipated.
+ 
+Another way to reduce interruption is to let interrupter to know the cost of interruption, so that they can judge whether to interrupt you or not right away or sometime later.
+
+## Chapter 4: Meetings - The medium of managerial work
+
+### 24. Process-oriented meeting
+
+We normally schedule process-oriented meeting regularly, its main purpose is to let participants exchange knowledge and information. 
+
+Process-oriented meeting should possess a high degree of regularity, all participants should be familiar with the flow of the meeting and the expected outcome. This allow us to accurately predict the time required for such meeting.
+
+#### One to One
+
+Meeting between a manager and his/her subordinate. The main purposes of One-to-One are:
+
+* Mutual Learning
+* Exchange information
+
+Andy argues one-to-one should be held even if manager and subordinate meet several times a day, because ??
+
+The frequency of one-to-one should depends on `task relevant maturity` of the subordinate, if subordinate is less familiar with his/her existing task, then we should have more one-to-one. Another consideration is the pace of the task, if a particular work area changes very fast, then we should have one to one more frequently, eg. marketing strategy need to change quickly to react to external business environment, so we need have one to one frequently in this context, but research is typically slower and can have lower frequency.
+
+One to one meeting should be long enough to allow participant to get into details of the issue they face.
+
+One to one should be regarded as the subordinate's meeting, with its agenda and tone set by him, because someone need to prepare for the meeting, a manager with 5 subordinates would need to prepare 5 meetings, while subordinate only need to prepare it once. 
+
+Subordinate should prepare an outline for the meeting, and he/she is responsible to walk the manager through it.
+
+One to one should cover:
+* Indicators that signal issues
+* Important events since last meeting, eg. hiring, production issue etc
+
+Supervisor is responsible to facilitate subordinate's expression of problems, to learn from subordinate and coach him.
+This is achieved using `Grove's Principle of Didactic Management`: **Ask one more question**, when subordinate finish talking on the subject, supervisor should ask one more question, this should continue until both parties feel they got to the bottom of the issue.
+
+Practical tips for effective one to one:
+* Both parties should have the outline of the meeting
+* Both parties should take notes
+* Maintain a list of important but non-urgent issue to be discussed in next meeting
+
+

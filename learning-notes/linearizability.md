@@ -69,7 +69,7 @@ eg. if our history can guarantee that
 
 OpA on Thread 1 happens after RetB of Thread 2, then we can guarantee T1:OpA and T2:OpB are NOT concurrent and thus reduce the state space
 
-The only problem is that to guarantee total order it has to rely on timestamp or some other synchronization mechanism     
+The only problem is that to guarantee total order it has to rely on timestamp or some other synchronization mechanism 
 
 ### Parallelize the test
 
@@ -97,6 +97,6 @@ If the total order of `1` is fixed as 1st element, then there are only 2 possibl
 
 The actual algo for event history is more complicated as we need to consider partial order.
 
-## Caveat with timeout
+## Caveat with timeout in distributed system
 
 If an operation timeout or failed with unknown reason, then we need to assume that such operation can complete anytime after it was initiated, or never complete, this make linearizability check exponentially expensive but is necessary to ensure correctness.
