@@ -22,7 +22,7 @@ Good, I am getting better at it
 1. Important to stay happy, it is infectious
 
 
-# 10-23/01/2020
+# 16-23/04/2020
 ## What happened?
 
 ## How you feel?
@@ -41,3 +41,15 @@ So moving back to building high level api, in business context, your high level 
 * It is harder to change because logic is now spread across a network boundary, likely in different codebase with different lifecycle
 
 I think the lesson is that think through an api if it is a high level one, if the idea is still fuzzy, maybe consider exposing low level api 1st to let consumer play with it to form a better idea for the use case 
+
+# 25/04/2020
+## What happened?
+I've been working on apigen, it has been great as I manage to get into a flow-like state. I havent get into such state for a very long time. 
+
+## How you feel?
+Great, I manage to make some decent progress 
+
+## What have you learn?
+1. If we need to process a tree with path dependent context, where such path is from bottom to top (aka leaf to root), then we can use catamorphism, where the inner type is `Path, A` or equivalent, this way, we can initiate path from leaf, and build up when we recurse up
+2. If our context path is top to bottom (aka root to leaf), then we can't use the approach above. Catamorphism first traverse to the leaf of the tree, then process it, and return to upper layer with processed result, at each layer, we can get data from lower layer, but we lose information about upper layer. This can be solved by modeling inner type as `Path => A`, this signature means that each layer now accepts a `Path` params, which provided by the caller, who is the caller? it has to be upper layer, since the lower layer returns to upper layer, so this model allow upper layer to pass context down the tree.
+3. I failed to make a compelling case to push for not doing experiment because I am a conformist. I am not willing to challenge things that I can't measure objectively
