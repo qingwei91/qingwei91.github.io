@@ -9,4 +9,32 @@ We should try to identify the high level concepts in the product, and structure 
 For example, our current slice of Edge 
 
 Important note: Maybe visualizing Value Chain is a better way, 
-For example: 
+For example: Segmentation value chain is as follow
+
+```
+Events
+TPD       -> Segmentation -> Business Value
+Identity
+```
+
+# 10 / 10 / 2020
+
+I learned the proper definition of Linear Transformation, linear transformations are transformation that obey Superposition property, ie.
+
+f(a + b) = f(a) + f(b)
+f(c.x) = c.f(x)
+
+Then eigenvalue and eigenvectors is defined as A = x.B, where x is eigen value and B is eigen vector, then A is a linear transformation, the gist is that eigenvectors characterize a linear transformation
+
+I learned something about Singular Value Decomposition (SVD), it is a technique to decompose matrix and reveal significant parts of the the original matrix.
+
+It is used in machine learning as a feature reduction tools, SVD factorize a matrix (M x N) into 3 parts
+
+U               - a unitary matrix where each column vector correspond to a column vector to input matrix
+Sigma           - a diagonal matrix where each column indicate relative strength of 
+V-transpose     - a unitary matrix where each row correspond to a row vector of input matrix
+
+It is essentially a matrix approximation technique that allow us to approximate matrix X with a lower rank matrix X~, rank is a measure of no of independent column in a 
+matrix.
+
+### Applying this in NLP
