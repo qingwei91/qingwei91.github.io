@@ -269,7 +269,12 @@ One to one should be regarded as the subordinate's meeting, with its agenda and 
 
 Subordinate should prepare an outline for the meeting, and he/she is responsible to walk the manager through it.
 
-One to one should cover:
+**One to one should cover**:
+* Performance metrics
+* Hiring
+* People problem
+* Operational problem
+* Organizational problem
 * Indicators that signal issues
 * Important events since last meeting, eg. hiring, production issue etc
 
@@ -280,5 +285,4 @@ Practical tips for effective one to one:
 * Both parties should have the outline of the meeting
 * Both parties should take notes
 * Maintain a list of important but non-urgent issue to be discussed in next meeting
-
 

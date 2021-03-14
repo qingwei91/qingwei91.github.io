@@ -19,6 +19,20 @@ These 2 sentences are highly similar if we compute cosine similarity using word 
 
 ---
 
+## What does Linear really means?
+
+Linear system by definition need to have [superposition property](https://en.wikipedia.org/wiki/Superposition_principle)
+
+Meaning the transformation in the system need to fulfill 2 properties:
+
+f(x+y) = f(x) + f(y)
+f(c.x) = c.f(x)
+
+where f is any transformation, and + and . is some operations
+
+the significance of this theorem is that it makes operation decomposable/composable in well-defined ways, which means we can solve complex problem by breaking it down into
+simpler problems and solve them instead
+
 ## Simple Linear regression
 
 Use `y=a+bx` to fit data set, only suitable for data with 2 variables

@@ -67,3 +67,10 @@ yarn-error.log
 .pnp.js
 # Yarn Integrity file
 .yarn-integrity
+
+# Scala
+**/.bsp
+**/target
+
+# obsidian
+**/.obsidian
