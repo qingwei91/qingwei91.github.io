@@ -30,6 +30,9 @@ Discover issues in our new home.
 
 ## How do I feel?
 Feel good about work, upset about the situation of our home.
-Also continue 
+Continue to feel uncertain about future, I observed this notion causes big damage when things are not smooth. It hints that I need to be more resilent.
 
 ## What have I learned?
+* I confirmed that people appreciate my organization skills.
+* I internalize an important factor to determine prioritization is the view/vision required for a task, if a task requires something that only I know/have then I have to prioritize that, otherwise I should look to delegate
+* It is great to have slack, it helps clear up mind, a similar observation can probably be made in queue system
