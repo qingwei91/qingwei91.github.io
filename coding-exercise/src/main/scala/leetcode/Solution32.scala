@@ -1,3 +1,5 @@
+package leetcode
+
 object Solution32 {
   def longestValidParentheses(s: String): Int = {
     val sLen = s.length

@@ -1,3 +1,5 @@
+Dead, this is done by metaview.
+
 # Problem
 
 It is important to record decision made in meeting, typical options are
@@ -13,4 +15,5 @@ It would be great if we can automatically generate summary and have user to glan
 
 Input: Meeting video
 Output: 
+
 

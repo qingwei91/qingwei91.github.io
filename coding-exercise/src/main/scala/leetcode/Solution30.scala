@@ -1,5 +1,6 @@
+package leetcode
+
 import scala.collection.mutable
-import scala.collection.mutable.ListBuffer
 
 object Solution30 {
   def findSubstring(s: String, words: Array[String]): List[Int] = {

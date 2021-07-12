@@ -36,3 +36,37 @@ Continue to feel uncertain about future, I observed this notion causes big damag
 * I confirmed that people appreciate my organization skills.
 * I internalize an important factor to determine prioritization is the view/vision required for a task, if a task requires something that only I know/have then I have to prioritize that, otherwise I should look to delegate
 * It is great to have slack, it helps clear up mind, a similar observation can probably be made in queue system
+
+# 15 - 23 / 03 / 2021
+
+## What happened?
+Failed to solve the tech interview which is expected XD
+Getting back to work and while I still struggle to wake up, going through it feels a lot better.
+
+## How do I feel?
+I need to realize I have options, I have choices and I am an adult that can bear responsibility.
+
+I can fail and I dont have to live up to anyone's expectation, perhaps with the exception of mine. It is more important for me to follow my heart and do the right thing and see how things unfold.
+
+## What have I learned?
+Composability is probably a fundamental attribute to many great stuffs, to be able to scale an organization effectively, we need to be able to compose and decompose work. I am just amazed that as time goes, the more I realize composability is fundamental XD
+
+I think I did a good job on prioritizing and managing stuff after I am back, a lot of this can be contributed to having Product to own prioritization so that I dont need to figure it out.
+
+I think I am quite good at debugging, partly because I did it a lot, is there anything I can extract from it?
+
+# 23 - 28 / 03 / 2020
+## What happened?
+A hectic week, plenty of things get thrown at me
+
+## How you feel?
+I feel ok, it helps to be an observer and look at things as it happens.
+Most thing shall pass, and whatever happening on me couldnt be smaller.
+
+## What have you learn?
+
+* Product delivery is only a part of a managerial role, I actually have 3 concerns:
+    - Achieving Product Delivery Goal
+    - Establishing process to make subsequent iteration easier
+    - Think about the cost of delivery, operating cost, maintainence cost and future development cost
+* 
