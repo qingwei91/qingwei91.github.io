@@ -25,7 +25,8 @@
 <p>Be aware on dependency of system time, in theory distributed system should rely on system time for correctness, but it is ok to depend on system time for other purpose like live-ness or debugging. We just need to keep in mind that clock drift is real.</p>
 <h3>Availability</h3>
 <p>Availability refers to the ability of the system to continue it’s operation even when part of the system is down.</p>
-<h3>Throughput and Latency</h3>
+<h3>Timeout</h3>
+<p>In distributed system, it is inevitable to have timeout, because network partition can happen anytime. Timeout brings a lot of complexity to our system because when an operation timed out on the caller, the operation might actually finished, or failed on the callee, or worse it might finished later, which the caller has no visibility at all.</p>
 <h3>Idempotency</h3>
 <p>It is typically for client to retry, thus it is crucial for api to be idempotent.</p>
 <h2>Trade off</h2>
@@ -37,7 +38,7 @@
 <li>What happen if your system have network partition between your servers?</li>
 <li>What happen if multiple operations interleave with each other? (Concurrency)</li>
 <li>What happen if a message is delivered multiple times?</li>
-</ol></div><hr style="margin-bottom:1.75rem"/><div><img src="/static/profile-pic-9bfd53bbb1672cec59deaee918e5c18f.jpg" alt="profile-pic"/><div style="display:flex;margin-bottom:4.375rem"><div>I like to talk about stuff I have no idea about. Sometimes I even write about them.</div></div></div><ul style="display:flex;flex-wrap:wrap;justify-content:space-between;list-style:none;padding:0"><li><a rel="prev" href="/books-summary/business-dynamics/">← <!-- -->Summary of Business Dynamics</a></li><li><a rel="next" href="/stateful-app/">Build Stateful with fs2, cats-effect<!-- --> →</a></li></ul></div></div></div><script>
+</ol></div><hr style="margin-bottom:1.75rem"/><div><img src="/static/profile-pic-9bfd53bbb1672cec59deaee918e5c18f.jpg" alt="profile-pic"/><div style="display:flex;margin-bottom:4.375rem"><div>I like to talk about stuff I have no idea about. Sometimes I even write about them.</div></div></div><ul style="display:flex;flex-wrap:wrap;justify-content:space-between;list-style:none;padding:0"><li><a rel="prev" href="/books-summary/business-dynamics/">← <!-- -->Summary of Business Dynamics</a></li><li><a rel="next" href="/learnings/rec-scheme-for-tree/">A failed attempt to visualize linearizability check<!-- --> →</a></li></ul></div></div></div><script>
   
   
   if(true) {
