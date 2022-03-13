@@ -1,7 +1,7 @@
 ---
 title: A reflection of my journey as a manager uptill Dec 2021
 date: "2021-11-20"
-# status: "WIP"
+status: "WIP"
 ---
 
 I wish write down things I've learned by being a manager in a systematic way, so that it can be used to guide my future development and execution.
