@@ -1,35 +1,32 @@
 ---
 title: My thoughts of being a Manager in Software Development
-date: "2022-03-13"
+date: "2022-04-07"
 # status: "WIP"
 ---
 
-# Intent
+# Overview
 
-This document is written primarily for my own benefit, I attempt to organize a bunch of random thoughts I have on the topic of becoming an Engineering Manager in this article. I intent to evolve it as my understanding evolve. It is bound to be incomplete, for now it will heavily focus on an entry level Manager, ie. managing 2 to 10 direct reports, without managing managers.
-
-Do be aware that different organizations might have different expectations and/or interpretation for managers, the hope is that they overlap enough so that we can discuss it in a generic way.
+I wish to organize my random thoughts on the topic of becoming an Engineering Manager, after being a manager for 2 years.
 
 # Structure of this article
 
-I will break the responsibilities of an Engineering Manager into a few areas, for each area, I will discuss manager's mission on each area, surprising observations in those area and lastly some applicable technique.
+I will break the responsibilities of an Engineering Manager into a few areas, for each area, we will discuss manager's mission on each area, surprising observations in those area and lastly some applicable technique.
 
-While different organizations, or even the same organizations at different stages need managers to do different thing, but I think we can still summarize them into a few areas.
+While different organizations, or even the same organizations at different stages might need managers to do different thing, I think we can still summarize them into a few areas.
 
 Before that, I wish to define the ultimate goal of being a manager, I see 2 parts in it:
 1. Help business to utilize resources to achieve its business goal that can be achieved using software technology
 2. Help the team (or whatever subunit you're in) to be reasonably happy and/or fulfilled
 
-The 1st one is pretty self-explanatory, I specifically want to call out the 2nd point, which is probably more of my own belief than universal truth, but I really think it is important to keep people happy when we can, and we shouldnt demand too much sarcrifice from people for the business. 
-Obviously there will inevitably has some tension between these 2 goals, and that's fine, managers just need to keep this in mind, remember we are people 1st, then only we are engineers, workers, economic actors.
+The 1st one is pretty self-explanatory, I specifically want to call out the 2nd point, it is probably more of my own belief than universal truth, but I really think it is important to keep people happy when we can. 
+Obviously there will inevitably be some tension between these 2 goals, and that's fine, managers just need to keep this in mind, remember we are people 1st, then only we are engineers, workers, economic actors.
 
 With these 2 goals, I believe the following areas are relevant:
 
 1. Team management
 2. Project/Work management
-3. Growing people
-4. External expectation management
-5. Manage upward and outward
+3. People's Growth
+4. Expectation management
 
 ## Team Management
 
@@ -84,6 +81,10 @@ I have a few opinions on hiring, I think that when hiring software engineers we 
 
 I havent gain enough data about what's the best way to interview engineers, so far I think take home exercise with decent complexity plus a review is pretty good. But I've also heard complaints that people with a job and family wouldnt want to do that, probably something to test and adjust.
 
+#### 5. Manage the talent-domain fit
+
+We should also keep an eye of the team formation, do we have a good mix of skills and expertise for the problem on hands. Occasionally, a team might take on new challenges that requires new skills, manager should then try to acquire those skills either by upskilling existing teams or hiring or some other ways.
+
 ### Work/Project management
 
 Working on projects seems to be how most team spend their time, it is therefore useful to define how the team should tackle work, and what is the role of manager here.
@@ -106,4 +107,6 @@ While we might not always stick to the plan, the action of planning is crucial h
 
 Lastly, I want to highlight the need of risk management, from my own painful experience. It is important to think about the risk of the work, and make sure its communicated to relevant people, including stakeholders, doing so gives everyone wiggle room to adjust or change plan later if an idea does not work out.
 
-### People and growth
+### People's Growth
+
+WIP
