@@ -13,6 +13,8 @@ One of the most common use case is collaborative text editing.
 
 To learn more, I recommend this survey study: [A comprehensive study of Convergent and Commutative Replicated Data Types](https://hal.inria.fr/inria-00555588/document).
 
+Note all source code used in this post can be found [here](https://github.com/qingwei91/crdt-scala3/).
+
 # CmRDT Algebras
 
 CmRDT (Commutative Replicated Data Types) is a type of CRDT, it is sometimes called op-based CRDT. The key characteristic of it is that changes on data are synced by operations instead of sending the whole state. This is in contrast with CvRDT, which sync by sending the whole state over the network, there are some trade-off between these 2 types, but we wont delve into them in this piece.
