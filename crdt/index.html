@@ -3,6 +3,7 @@
 <p>For readers who are unfamiliar to CRDT, CRDT is a kind of data structure that are replicated (typically across network), they can be updated independently and is guarantee to converge eventually without the need of a centralized controller (ie. a server).</p>
 <p>One of the most common use case is collaborative text editing.</p>
 <p>To learn more, I recommend this survey study: <a href="https://hal.inria.fr/inria-00555588/document">A comprehensive study of Convergent and Commutative Replicated Data Types</a>.</p>
+<p>Note all source code used in this post can be found <a href="https://github.com/qingwei91/crdt-scala3/">here</a>.</p>
 <h1>CmRDT Algebras</h1>
 <p>CmRDT (Commutative Replicated Data Types) is a type of CRDT, it is sometimes called op-based CRDT. The key characteristic of it is that changes on data are synced by operations instead of sending the whole state. This is in contrast with CvRDT, which sync by sending the whole state over the network, there are some trade-off between these 2 types, but we wont delve into them in this piece.</p>
 <p>We will explore the algebra of CmRDT, and encode them in Scala 3.</p>
