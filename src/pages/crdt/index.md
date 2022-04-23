@@ -1,13 +1,13 @@
 ---
-title: Implementing CmRDT using Scala
+title: CRDT implemented using Typeclass
 date: "2022-04-17"
 ---
 
 # Overview
 
-This article show how to implement some CRDTs (Conflict-free Replicated Data Type) using Scala 3. We will model CRDT as typeclass and use property checks to test it.
+This article shows how to implement CRDT using typeclass in Scala 3. I used this exercise to learn more about CRDT, while picking up some new features from Scala 3.
 
-In short, CRDT is a kind of data structure that are replicated (typically across network), they can be updated independently and is guarantee to converge eventually without the need of a centralized controller (ie. a server).
+For readers who are unfamiliar to CRDT, CRDT is a kind of data structure that are replicated (typically across network), they can be updated independently and is guarantee to converge eventually without the need of a centralized controller (ie. a server).
 
 One of the most common use case is collaborative text editing.
 
@@ -15,7 +15,7 @@ To learn more, I recommend this survey study: [A comprehensive study of Converge
 
 # CmRDT Algebras
 
-CmRDT (Commutative Replicated Data Types) is a type of CRDT, it is sometimes called op-based CRDT. The key characteristic of it is that changes on data are synced by operations instead of sending the whole state.
+CmRDT (Commutative Replicated Data Types) is a type of CRDT, it is sometimes called op-based CRDT. The key characteristic of it is that changes on data are synced by operations instead of sending the whole state. This is in contrast with CvRDT, which sync by sending the whole state over the network, there are some trade-off between these 2 types, but we wont delve into them in this piece.
 
 We will explore the algebra of CmRDT, and encode them in Scala 3.
 
@@ -259,4 +259,6 @@ So we now have a very cheap way to test all CmRDT, provided that we can implemen
 
 # Conclusion
 
-Personally, I think my main take-away of doing this exercise is the importance of distill a computing problem into its absolute essence and encode into using a powerful expressive type system. It helps us to reason about the problem and solution, for instance, we know that for a type to be a CmRDT, it needs to provide 3 methods and fulfill the commutative property of 2 of those methods. And we can compose these algebra to implement other opertaions while maintaining certain guarantee, the way we test it being a good example.
+I hope this exercise shows the usefulness of distilling a problem into its absolute essence and encode into using a powerful expressive type system. 
+
+It helps us to reason about problem and solution without much noise, for instance, we know that for a type to be a CmRDT, it needs to provide 3 methods and fulfill the commutative property of 2 of those methods. We can then compose these algebra to that provides interesting properties, an example here is our ability to leverage the typeclass to implement property check.
