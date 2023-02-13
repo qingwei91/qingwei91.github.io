@@ -1,5 +1,6 @@
 ---
 title: SQL Server how to write many rows quicker
+date: "2023-02-11"
 status: ""
 ---
 
