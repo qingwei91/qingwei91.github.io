@@ -27,5 +27,8 @@ First I sure want to finish current migration! Dont let it overrun massively.
 Then I want to continue my path as a Rust Learner, maybe build an application that I can show off instead of building tool.
 Options:
 
-1. Multiplayer snake game
-2. 
+1. Multiplayer snake game (manageable)
+2. Distributed stream processing engine (very hard to do part time)
+3. Data project to do some backtesting? (this wont make me learn about CS but might learn something else)
+4. Browser extension that capture and categorize content, then compute stats about it?
+5. 
